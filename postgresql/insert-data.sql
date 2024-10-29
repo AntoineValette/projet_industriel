@@ -1,5 +1,5 @@
 -- delete the table if exist; 
-drop table if exists 'logERR';  
+drop table if exists 'logOK';  
 
 -- creation de la table
 CREATE TABLE logOK (
