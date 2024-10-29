@@ -1,1 +1,13 @@
+
 .DS_Store
+*~
+.*.swp
+.DS_Store
+.ipynb_checkpoints
+.pixi
+*.egg-info
+pixi.lock
+pixi.toml
+.gitattributes
+.idea/
+
