@@ -1,2 +1,19 @@
+<<<<<<< HEAD
 .DS_Store
 .ipynb_checkpoints
+=======
+*.egg-info
+*~
+.*.swp
+.DS_Store
+.gitattributes
+.idea
+.idea/
+.ipynb_checkpoints
+.pixi
+/shelf/
+/workspace.xml
+__pycache__
+pixi.lock
+pixi.toml
+>>>>>>> refs/remotes/origin/main
