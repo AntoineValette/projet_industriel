@@ -1,7 +1,6 @@
-<<<<<<< HEAD
+#METTRE LES FICHIERS A IGNORER DANS GIT ICI
 .DS_Store
 .ipynb_checkpoints
-=======
 *.egg-info
 *~
 .*.swp
@@ -16,4 +15,3 @@
 __pycache__
 pixi.lock
 pixi.toml
->>>>>>> refs/remotes/origin/main
