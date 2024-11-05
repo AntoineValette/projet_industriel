@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS "logERR";
 -- create the table "logERR";
 CREATE TABLE "logERR" (
     ident BIGSERIAL,
-    date_insertion TIMESTAMP DEFAULT now(), 
+    date_insertion TIMESTAMP DEFAULT now(), -- modification pour fix bug 
     server_version VARCHAR(255),
     client_version VARCHAR(255),
     product VARCHAR(255),
