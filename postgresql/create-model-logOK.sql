@@ -9,7 +9,7 @@ drop table if exists "logOK" CASCADE;
 -- creation de la table
 CREATE TABLE "logOK" (
 	ident 						BIGSERIAL, 
-	dt_insertion 				timestamp, 
+	dt_insertion 				timestamp DEFAULT now(), 
 	server_version 				VARCHAR(255),
 	client_version 				VARCHAR(255),
 	model 						VARCHAR(255),
