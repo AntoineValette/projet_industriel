@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_USER: supever
+      POSTGRES_PASSWORD: DORsupever2025
+      POSTGRES_DB: DORdatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: my_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: guillaume.ramirez@student-cs.fr
+      PGADMIN_DEFAULT_PASSWORD: DORsupever2025
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  python_app:
+    build:
+      context: ./python_script
+    container_name: my_python_script
+    depends_on:
+      - postgres
+    environment:
+      - GITLAB_ACCESS_TOKEN=glpat-_4WrYxAXrZXT9daffebY
+    volumes:
+      - ./python_script:/script
+
+volumes:
+  postgres_data:
