@@ -2,7 +2,7 @@
 # note de manon : attention risque de push des secret dans le dépot gitlab (forbiden)
 # il faudra trouver une solution plus propre 
 .env
-
+data/
 *.egg-info
 *~
 .*.swp
