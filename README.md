@@ -19,9 +19,9 @@ git clone git@gitlab-student.centralesupelec.fr:PI7/smartETL.git
 2.2 mettre les fichiers de log dans le répertoire smartETL/data
 
 
-## 3. run
+## 3. Run
 
- pour lancer l'application
+P our lancer l'application : 
 ```
 cd smartETL
 docker compose build
