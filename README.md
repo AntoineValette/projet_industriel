@@ -1,6 +1,6 @@
 # Projet n°7 : smartETL "DOR"
 
-## 1. Pre requis 
+## 1. Pile logicielle 
 
 - conda
 - docker 
@@ -9,15 +9,19 @@
 - python 3.12
 - postgresql 17.2
 
-## 2. usage 
+## 2. Pré-requis 
 
-Pour utiliser l'application, il faut exporter le code source à l'aide de git
-
+2.1 exporter le dépot 
 ```
 git clone git@gitlab-student.centralesupelec.fr:PI7/smartETL.git
 ```
 
-Puis utiliser docker composer pour lancer l'application
+2.2 mettre les fichiers de log dans le répertoire smartETL/data
+
+
+## 3. run
+
+ pour lancer l'application
 ```
 cd smartETL
 docker compose build
