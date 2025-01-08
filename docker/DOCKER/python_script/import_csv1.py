@@ -4,19 +4,6 @@ import csv
 import os
 import re
 
-# Configuration pour le premier fichier CSV
-gitlab_token = os.getenv("GITLAB_ACCESS_TOKEN")
-gitlab_file_url_1 = "https://gitlab-student.centralesupelec.fr/api/v4/projects/13332/repository/files/data%2F241016_LogETL.csv/raw?ref=main"
-
-# Télécharger le premier fichier CSV
-headers = {"Private-Token": gitlab_token}
-response = requests.get(gitlab_file_url_1, headers=headers)
-if response.status_code == 200:
-    with open("data1.csv", "wb") as file:
-        file.write(response.content)
-else:
-    print("Erreur de téléchargement du fichier CSV 1")
-
 # Connexion à la base de données PostgreSQL
 conn = psycopg2.connect(
     host="postgres",
@@ -29,7 +16,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Ouverture du fichier CSV
-with open("data1.csv", 'r', encoding='utf-8-sig') as f:
+with open("./data1.csv", 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     next(reader)
     for row in reader:
