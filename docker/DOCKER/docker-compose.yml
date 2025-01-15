@@ -1,7 +1,8 @@
+name: dorApp
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17.2
     container_name: my_postgres
     environment:
       POSTGRES_USER: supever
@@ -10,6 +11,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      -
     ports:
       - "5432:5432"
     healthcheck:
@@ -20,7 +22,7 @@ services:
     restart: always
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:8.14.0
     container_name: my_pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: guillaume.ramirez@student-cs.fr
@@ -28,14 +30,18 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+        restart: true
 
   python_app:
     build:
       context: ./python_script
     container_name: my_python_script
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+        restart: true
     environment:
       - GITLAB_ACCESS_TOKEN=glpat-_4WrYxAXrZXT9daffebY
     volumes:
