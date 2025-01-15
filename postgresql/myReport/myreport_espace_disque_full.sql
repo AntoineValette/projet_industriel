@@ -26,6 +26,6 @@ CREATE TABLE IF NOT EXISTS myreport_espace_disque_full
     temp_mort VARCHAR(50),
     temp_mort_raw VARCHAR(50),
     Couverture VARCHAR(50),
-    Couverture_raw VARCHAR(50),
+    Couverture_raw VARCHAR(50)
 
 );

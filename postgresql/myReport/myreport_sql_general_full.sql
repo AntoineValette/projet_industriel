@@ -22,6 +22,6 @@ CREATE TABLE IF NOT EXISTS myreport_sql_general_full
     temp_mort VARCHAR(50),
     temp_mort_raw VARCHAR(50),
     Couverture VARCHAR(50),
-    Couverture_raw VARCHAR(50),
+    Couverture_raw VARCHAR(50)
 
 );
