@@ -12,10 +12,10 @@ CREATE TABLE IF NOT EXISTS myreport_swap_full
 	ident BIGSERIAL,
     Date VARCHAR(255), --il y aura un traitement à faire sur les données
     heureDate_RAW REAL,
-    Total REAL,
+    Total VARCHAR(255),
     Total_RAW REAL,
-    Temps_mort_mem REAL,
+    Temps_mort_mem VARCHAR(255),
     Temps_mort_mem_RAW REAL,
-    Couverture_mem REAL,
+    Couverture_mem VARCHAR(255),
     Couverture_mem_RAW REAL
 );

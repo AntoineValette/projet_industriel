@@ -10,18 +10,16 @@ DROP TABLE IF EXISTS myreport_sql_general_full;
 CREATE TABLE IF NOT EXISTS myreport_sql_general_full
 (
 	ident BIGSERIAL,
-    date_insertion TIMESTAMP DEFAULT now(),
-	date_heure VARCHAR(30),
-    date_heure_raw VARCHAR(30),
-    Connexions_user VARCHAR(50),
-    Connexions_user_raw VARCHAR(50),
-    Connexions VARCHAR(50),
-    Connexions_Raw VARCHAR(50),
-    Déconnexions VARCHAR(50),
-    Déconnexions_raw VARCHAR(50),
-    temp_mort VARCHAR(50),
-    temp_mort_raw VARCHAR(50),
-    Couverture VARCHAR(50),
-    Couverture_raw VARCHAR(50)
-
+	date_heure VARCHAR(255),
+    date_heure_raw REAL,
+    Connexions_user VARCHAR(255),
+    Connexions_user_raw REAL,
+    Connexions VARCHAR(255),
+    Connexions_Raw REAL,
+    Déconnexions VARCHAR(255),
+    Déconnexions_raw REAL,
+    temp_mort VARCHAR(255),
+    temp_mort_raw REAL,
+    Couverture VARCHAR(255),
+    Couverture_raw REAL
 );
