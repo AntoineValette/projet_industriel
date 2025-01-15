@@ -1,8 +1,17 @@
 #METTRE LES FICHIERS A IGNORER DANS GIT ICI
 # note de manon : attention risque de push des secret dans le dépot gitlab (forbiden)
 # il faudra trouver une solution plus propre 
+
+# on inhibe le fichier .env
+# on ne veut pas voir de secrets commités sur le dépot
+# meme si on l'utilise en local et qu'on le modifie avec nos propres identifiants
 .env
+
+# on inhibe le repertoire data
+# on ne veut pas voir son contenu commité sur le dépot
+# meme si on l'utilise en local
 data/
+
 *.egg-info
 *~
 .*.swp
