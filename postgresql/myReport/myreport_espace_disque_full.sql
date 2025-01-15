@@ -10,9 +10,8 @@ DROP TABLE IF EXISTS myreport_espace_disque_full;
 CREATE TABLE IF NOT EXISTS myreport_espace_disque_full
 (
 	ident BIGSERIAL,
-    date_insertion TIMESTAMP DEFAULT now(),
 	date_heure VARCHAR(30),
-    date_heure_raw VARCHAR(30),
+    date_heure_raw REAL,
     somme VARCHAR(50),
     somme_RAW VARCHAR(50),
     octetLibreC VARCHAR(40),
@@ -27,5 +26,4 @@ CREATE TABLE IF NOT EXISTS myreport_espace_disque_full
     temp_mort_raw VARCHAR(50),
     Couverture VARCHAR(50),
     Couverture_raw VARCHAR(50)
-
 );

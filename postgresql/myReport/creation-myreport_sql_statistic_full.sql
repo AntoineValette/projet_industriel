@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS myreport_sql_statistic_full;
 CREATE TABLE IF NOT EXISTS myreport_sql_statistic_full
 (
 	ident BIGSERIAL,
-	date_insertion TIMESTAMP DEFAULT now(), -- modification pour fix bug
     date_heure VARCHAR(255),
     date_heure_raw VARCHAR(20),
     nombre_requetes_lots VARCHAR(35),
