@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS myreport_ram
 -- création de la table myreport_reseau
 CREATE TABLE IF NOT EXISTS myreport_reseau
 (
-	ident BIGSERIAL,
+    ident BIGSERIAL,
     Date VARCHAR(255),--il y aura un traitement à faire sur les données
     heureDate_RAW REAL,
     Somme_Volume VARCHAR(255),
@@ -239,8 +239,8 @@ CREATE TABLE IF NOT EXISTS myreport_sql_lock
 CREATE TABLE IF NOT EXISTS myreport_swap
 (
 	ident BIGSERIAL,
-    Date VARCHAR(255), --il y aura un traitement à faire sur les données
-    heureDate_RAW REAL,
+    date_heure VARCHAR(255), --il y aura un traitement à faire sur les données
+    date_heure_RAW REAL,
     Total VARCHAR(255),
     Total_RAW REAL,
     Temps_mort_mem VARCHAR(255),
@@ -308,3 +308,67 @@ CREATE TABLE IF NOT EXISTS myreport_sql_general
     Couverture_raw REAL
 );
 
+-- création de la table DashboardLogs
+CREATE TABLE IF NOT EXISTS DashboardLogs
+(
+	ident BIGSERIAL,
+    Id REAL,
+	DatetimeLog VARCHAR(255),
+    Login VARCHAR(255),
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    DashboardId VARCHAR(255),
+    DashboardName VARCHAR(255),
+    TabName VARCHAR(255),
+    ExecutionGuid VARCHAR(255),
+    IsEmbedded REAL
+);
+
+-- création de la table DistributionLogs
+CREATE TABLE IF NOT EXISTS DistributionLogs
+(
+	ident BIGSERIAL,
+    Id REAL,
+	DatetimeLog VARCHAR(255),
+    Login VARCHAR(255),
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    DistributionId VARCHAR(255),
+    DistributionName VARCHAR(255),
+    IsError REAL,
+    ScheduleId VARCHAR(255),
+    ScheduleName VARCHAR(255),
+    ExecutionGuid VARCHAR(255)
+);
+
+-- création de la table FieldLogs
+CREATE TABLE IF NOT EXISTS FieldLogs
+(
+	ident BIGSERIAL,
+    Id REAL,
+	DatetimeLog VARCHAR(255),
+    ModelId VARCHAR(255),
+    ModelName VARCHAR(255),
+    TableId VARCHAR(255),
+    TableName VARCHAR(255),
+    RangeAddress VARCHAR(255),
+    FieldId VARCHAR(255),
+    FieldName VARCHAR(255),
+    Login VARCHAR(255),
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    ExecutionType VARCHAR(255),
+    ExecutionGuid VARCHAR(255),
+    WorkbookName VARCHAR(255),
+    WorkbookPath VARCHAR(255),
+    MachineName VARCHAR(255),
+    DistributionId VARCHAR(255),
+    DistributionName VARCHAR(255),
+    ScheduleId VARCHAR(255),
+    ScheduleName VARCHAR(255),
+    DashboardId VARCHAR(255),
+    DashboardName VARCHAR(255),
+    TabName VARCHAR(255),
+    IsEmbedded REAL,
+    SessionName VARCHAR(255)
+);
