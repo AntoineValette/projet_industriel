@@ -1,15 +1,13 @@
 import psycopg2
+import io
+from fastparquet import ParquetFile
+from datetime import datetime
 
-print("Début du script")
-try:
-    import pandas as pd
-    print("Pandas importé avec succès")
-except Exception as e:
-    print(f"Erreur lors de l'importation de Pandas : {e}")
-    raise
+def log(message):
+    """Simple fonction de logging."""
+    print(f"[{datetime.now()}] {message}")
 
-
-print("Tous les imports ont été effectués")
+log("Début du script")
 
 # Connexion à la base de données PostgreSQL
 conn = psycopg2.connect(
@@ -19,115 +17,188 @@ conn = psycopg2.connect(
     password="DORsupever2025"
 )
 
-# Création d'un curseur pour exécuter des requêtes SQL
-cur = conn.cursor()
-
-print("jusqu'ici tout va bien2")
+log("Connexion à PostgreSQL établie")
 
 # Charger le fichier Parquet
 file_path = "./data/DashboardLogs.parquet"  # Chemin du fichier Parquet
-df = pd.read_parquet(file_path)
+pf = ParquetFile(file_path)
+pf_count = pf.count()
+print(pf_count)
 
-print("jusqu'ici tout va bien3")
+log(f"Fichier Parquet chargé : {file_path}")
+log(f"Nombre total de lignes dans le fichier : {pf.count()}")
 
-# Parcourir chaque ligne du DataFrame et insérer les données dans la table PostgreSQL
-rows = [tuple(x) for x in df.itertuples(index=False, name=None)]
-cur.executemany(
-        """
-        INSERT INTO DashboardLogs (
-            Id,
-            DatetimeLog,
-            Login,
-            FirstName,
-            LastName,
-            DashboardId,
-            DashboardName,
-            TabName,
-            ExecutionGuid,
-            IsEmbedded
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """,
-        rows
-    )
+# Définir la taille des batches
+batch_size = 5000
 
-print("jusqu'ici tout va bien4")
+# Insérer les données en batches
+total_rows = 0
+for i in range(0, pf_count, batch_size):
+    log(f"Lecture des lignes {i} à {min(i + batch_size, pf_count)}")
+    # Charger les données en batch en Pandas DataFrame
+    batch_df = pf.to_pandas().iloc[i:i + batch_size]
+
+    # Convertir les données en tuples
+    rows = [tuple(x) for x in batch_df.itertuples(index=False, name=None)]
+
+    if not rows:
+        log(f"Aucun enregistrement à insérer pour le batch {i}")
+        continue
+
+    # Insérer dans la base de données
+    log(f"Insérer {len(rows)} lignes dans la table DashboardLogs")
+    with conn.cursor() as cur:
+        cur.executemany(
+            """
+            INSERT INTO DashboardLogs (
+                Id,
+                DatetimeLog,
+                Login,
+                FirstName,
+                LastName,
+                DashboardId,
+                DashboardName,
+                TabName,
+                ExecutionGuid,
+                IsEmbedded
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            rows
+        )
+    conn.commit()
+    total_rows += len(rows)
+    log(f"Batch inséré : {len(rows)} lignes")
+
+log(f"Importation terminée avec succès : {total_rows} lignes insérées")
 
 # Charger le fichier Parquet
 file_path = "./data/DistributionLogs.parquet"  # Chemin du fichier Parquet
-df = pd.read_parquet(file_path)
+pf = ParquetFile(file_path)
+pf_count = pf.count()
+print(pf_count)
 
-# Parcourir chaque ligne du DataFrame et insérer les données dans la table PostgreSQL
-rows = [tuple(x) for x in df.itertuples(index=False, name=None)]
-cur.executemany(
-        """
-        INSERT INTO DistributionLogs (
-            Id,
-            DatetimeLog,
-            Login,
-            FirstName,
-            LastName,
-            DistributionId,
-            DistributionName,
-            IsError,
-            ScheduleId,
-            ScheduleName,
-            ExecutionGuid
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """,
-        rows
-    )
+log(f"Fichier Parquet chargé : {file_path}")
+log(f"Nombre total de lignes dans le fichier : {pf.count()}")
 
-print("jusqu'ici tout va bien5")
+# Définir la taille des batches
+batch_size = 5000
+
+# Insérer les données en batches
+total_rows = 0
+for i in range(0, pf_count, batch_size):
+    log(f"Lecture des lignes {i} à {min(i + batch_size, pf_count)}")
+    # Charger les données en batch en Pandas DataFrame
+    batch_df = pf.to_pandas().iloc[i:i + batch_size]
+
+    # Convertir les données en tuples
+    rows = [tuple(x) for x in batch_df.itertuples(index=False, name=None)]
+
+    if not rows:
+        log(f"Aucun enregistrement à insérer pour le batch {i}")
+        continue
+
+    # Insérer dans la base de données
+    log(f"Insérer {len(rows)} lignes dans la table DistributionLogs")
+    with conn.cursor() as cur:
+        cur.executemany(
+            """
+            INSERT INTO DistributionLogs (
+                Id,
+                DatetimeLog,
+                Login,
+                FirstName,
+                LastName,
+                DistributionId,
+                DistributionName,
+                IsError,
+                ScheduleId,
+                ScheduleName,
+                ExecutionGuid
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            rows
+        )
+    conn.commit()
+    total_rows += len(rows)
+    log(f"Batch inséré : {len(rows)} lignes")
+
+log(f"Importation terminée avec succès : {total_rows} lignes insérées")
 
 # Charger le fichier Parquet
 file_path = "./data/FieldLogs.parquet"  # Chemin du fichier Parquet
-df = pd.read_parquet(file_path)
+pf = ParquetFile(file_path)
+pf_count = pf.count()
+print(pf_count)
 
-# Parcourir chaque ligne du DataFrame et insérer les données dans la table PostgreSQL
-rows = [tuple(x) for x in df.itertuples(index=False, name=None)]
-cur.executemany(
-        """
-        INSERT INTO FieldLogs (
-            Id,
-            DatetimeLog,
-            ModelId,
-            ModelName,
-            TableId,
-            TableName,
-            RangeAddress,
-            FieldId,
-            FieldName,
-            Login,
-            FirstName,
-            LastName,
-            ExecutionType,
-            ExecutionGuid,
-            WorkbookName,
-            WorkbookPath,
-            MachineName,
-            DistributionId,
-            DistributionName,
-            ScheduleId,
-            ScheduleName,
-            DashboardId,
-            DashboardName,
-            TabName,
-            IsEmbedded,
-            SessionName
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """,
-        rows
-    )
+log(f"Fichier Parquet chargé : {file_path}")
+log(f"Nombre total de lignes dans le fichier : {pf_count}")
 
-print("jusqu'ici tout va bien6")
+# Définir la taille des batches
+batch_size = 500000
+total_rows = 0
 
-# Valider les changements dans la base de données
-conn.commit()
+# Connexion à la base de données
+conn = psycopg2.connect(
+    host="postgres",
+    database="DORdatabase",
+    user="supever",
+    password="DORsupever2025"
+)
 
-print("jusqu'ici tout va bien7")
+# Insérer les données en utilisant COPY
+for i in range(0, pf_count, batch_size):
+    log(f"Lecture des lignes {i} à {min(i + batch_size, pf_count)}")
+    
+    # Charger les données en batch en Pandas DataFrame
+    batch_df = pf.to_pandas().iloc[i:i + batch_size]
+
+    # Préparer un flux CSV en mémoire
+    output = io.StringIO()
+    batch_df.to_csv(output, index=False, header=False)  # Pas de header car COPY attend des données brutes
+    output.seek(0)
+
+    # Copier dans la base de données
+    with conn.cursor() as cur:
+        log(f"Insérer {len(batch_df)} lignes dans la table FieldLogs via COPY")
+        cur.copy_expert(
+            """
+            COPY FieldLogs (
+                Id,
+                DatetimeLog,
+                ModelId,
+                ModelName,
+                TableId,
+                TableName,
+                RangeAddress,
+                FieldId,
+                FieldName,
+                Login,
+                FirstName,
+                LastName,
+                ExecutionType,
+                ExecutionGuid,
+                WorkbookName,
+                WorkbookPath,
+                MachineName,
+                DistributionId,
+                DistributionName,
+                ScheduleId,
+                ScheduleName,
+                DashboardId,
+                DashboardName,
+                TabName,
+                IsEmbedded,
+                SessionName
+            ) FROM STDIN WITH CSV
+            """,
+            output
+        )
+    conn.commit()
+    total_rows += len(batch_df)
+    log(f"Batch inséré : {len(batch_df)} lignes")
+
+log(f"Importation terminée avec succès : {total_rows} lignes insérées")
 
 # Fermeture du curseur et de la connexion
-cur.close()
 conn.close()
-
-print("jusqu'ici tout va bien8")
+log("Connexion PostgreSQL fermée")
