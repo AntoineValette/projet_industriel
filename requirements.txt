@@ -11,3 +11,4 @@ starlette==0.38.2
 typing_extensions==4.12.2
 wheel==0.44.0
 psycopg2
+setuptools==75.1.0
