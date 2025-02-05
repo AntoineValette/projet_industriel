@@ -11,6 +11,7 @@
 # on ne veut pas voir son contenu commité sur le dépot
 # meme si on l'utilise en local
 data/
+.jupyter/
 
 *.egg-info
 *~
