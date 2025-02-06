@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:17.2
     container_name: my_postgres
     env_file:
       - ./environment/.env
@@ -13,7 +13,7 @@ services:
       - "5432:5432"
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:8.14.0
     container_name: my_pgadmin
     env_file:
       - ./environment/.env
