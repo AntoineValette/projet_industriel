@@ -32,5 +32,19 @@ services:
       - ./python_script:/script
       - ../../data:/data
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: my_grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./environment/.env
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - postgres
+
+
 volumes:
   postgres-data:
+  grafana-data:
