@@ -1,0 +1,370 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "decl10np6r5s0d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "decl10np6r5s0d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date_trunc('day', Date_et_heure::timestamp) AS jour,\n  SUM(Connection_Timeout_Error + Create_TABLE_Error + Date_Format_Error + Field_Size_Error + Guidez_Atelier_Error + Index_Error + Object_Reference_Error + Other_Error + Pre_Login_Error + Primary_Key_Error + SQL_Invalid_Query_Error + SQL_Query_Timeout_Error + Time_Format_Error + Unique_Index_Error + Value_DIV0_Error + Value_NAME_Error + Value_REF_Error + Value_VALUE_Error + Web_Service_Error) AS total_erreurs\nFROM dataset\nGROUP BY jour\nORDER BY jour;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Nb d'erreurs quotidiennes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "decl10np6r5s0d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 11,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT 'Connection_Timeout_Error' AS error_type, SUM(COALESCE(Connection_Timeout_Error, 0)) AS total FROM dataset\nUNION ALL\nSELECT 'Create_TABLE_Error', SUM(COALESCE(Create_TABLE_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Date_Format_Error', SUM(COALESCE(Date_Format_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Field_Size_Error', SUM(COALESCE(Field_Size_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Guidez_Atelier_Error', SUM(COALESCE(Guidez_Atelier_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Index_Error', SUM(COALESCE(Index_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Object_Reference_Error', SUM(COALESCE(Object_Reference_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Other_Error', SUM(COALESCE(Other_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Pre_Login_Error', SUM(COALESCE(Pre_Login_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Primary_Key_Error', SUM(COALESCE(Primary_Key_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'SQL_Invalid_Query_Error', SUM(COALESCE(SQL_Invalid_Query_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'SQL_Query_Timeout_Error', SUM(COALESCE(SQL_Query_Timeout_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Time_Format_Error', SUM(COALESCE(Time_Format_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Unique_Index_Error', SUM(COALESCE(Unique_Index_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Value_DIV0_Error', SUM(COALESCE(Value_DIV0_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Value_NAME_Error', SUM(COALESCE(Value_NAME_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Value_REF_Error', SUM(COALESCE(Value_REF_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Value_VALUE_Error', SUM(COALESCE(Value_VALUE_Error, 0)) FROM dataset\nUNION ALL\nSELECT 'Web_Service_Error', SUM(COALESCE(Web_Service_Error, 0)) FROM dataset;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Répartition par type d'erreus",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "decl10np6r5s0d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT 'ETL Achats' AS etl_type, SUM(COALESCE(ETL_Achats, 0)) AS total FROM dataset\nUNION ALL\nSELECT 'ETL BEXT', SUM(COALESCE(ETL_BEXT, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL Chargement PJ', SUM(COALESCE(ETL_Chargement_PJ, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL GLPI', SUM(COALESCE(ETL_GLPI, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL Heures Chauffeurs', SUM(COALESCE(ETL_Heures_Chauffeurs, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL JIRA', SUM(COALESCE(ETL_JIRA, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL KPI ALDI', SUM(COALESCE(ETL_KPI_ALDI, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL Taxation', SUM(COALESCE(ETL_Taxation, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL Vue Heures Agrégées', SUM(COALESCE(ETL_Vue_Heures_Agregees, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL sur ordre', SUM(COALESCE(ETL_sur_ordre, 0)) FROM dataset\nUNION ALL\nSELECT 'ETL_API_JWT', SUM(COALESCE(ETL_API_JWT, 0)) FROM dataset\nUNION ALL\nSELECT 'Tous les jours', SUM(COALESCE(Tous_les_jours, 0)) FROM dataset\nUNION ALL\nSELECT 'Toutes les semaines, le dimanche', SUM(COALESCE(Toutes_les_semaines_le_dimanche, 0)) FROM dataset;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "NB erreurs par Program_Name",
+      "type": "barchart"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2024-07-29T00:00:00.000Z",
+    "to": "2024-11-10T00:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Mon premier dashboard",
+  "uid": "decl3bnqmmb5sd",
+  "version": 5,
+  "weekStart": ""
+}
