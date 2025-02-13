@@ -42,7 +42,7 @@ services:
       postgres:
           condition: service_healthy
     volumes:
-      - ./python/import:/script
+      - ./python/init:/script
       - ./data:/data
 
   grafana:

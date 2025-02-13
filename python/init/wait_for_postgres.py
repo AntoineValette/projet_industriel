@@ -1,6 +1,6 @@
 import psycopg2
 import time
-from python.core.Settings import Settings
+from core.settings import Settings
 
 # Fonction pour vérifier la connexion
 def wait_for_postgres():
@@ -18,6 +18,3 @@ def wait_for_postgres():
         except psycopg2.OperationalError:
             print("Attente de PostgreSQL...")
             time.sleep(2)
-
-wait_for_postgres()
-

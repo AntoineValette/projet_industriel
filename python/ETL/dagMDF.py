@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 # name : dagMDF.py
 # author :
 # version :
@@ -8,9 +10,11 @@
 import time
 import pandas as pd
 import matplotlib.pyplot as plt
-from python.core import Settings
+from core.settings import Settings
+
 
 class DagMDF:
+
 
     def extract(self):
         print(time.time(),' - Extracting DagMDF')
@@ -23,9 +27,3 @@ class DagMDF:
         print(time.time(),' - Loading DagMDF')
 
 
-if __name__ == "__main__":
-    print(time.time(),' - debut du script')
-    dagMDF = DagMDF()
-    dagMDF.extract()
-    dagMDF.transform()
-    dagMDF.load()

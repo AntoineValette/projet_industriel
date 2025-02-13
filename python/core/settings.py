@@ -11,6 +11,6 @@ class Settings():
     POSTGRES_USER = os.getenv("POSTGRES_USER", "supever")
     POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "Azerty01+")
 
-
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 settings = Settings()
