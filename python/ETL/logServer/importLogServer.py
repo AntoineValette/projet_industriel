@@ -1,22 +1,22 @@
-import csv
-import os
-import psycopg2
+from ETL.logServer.myreport_cpu_full import importMyreport_cpu_full
+from ETL.logServer.myreport_espace_disque_full import importMyreport_espace_disque_full
+from ETL.logServer.myreport_ping_full import importMyreport_ping_full
+from ETL.logServer.myreport_ram_full import importMyreport_ram_full
+from ETL.logServer.myreport_reseau_full import importMyreport_reseau_full
+from ETL.logServer.myreport_sql_general_full import importMyreport_sql_general_full
+from ETL.logServer.myreport_sql_gestionairedememoire_full import importMyreport_sql_gestionairedememoire_full
+from ETL.logServer.myreport_sql_lock_full import importMyreport_sql_lock_full
+from ETL.logServer.myreport_sql_statistic_full import importMyreport_sql_statistic_full
+from ETL.logServer.myreport_swap_full import importMyreport_swap_full
 
-from core.coreLog import log
-from core.settings import Settings
-
-def importLogETLerror():
-    log("Connexion à PostgreSQL")
-    conn = psycopg2.connect(
-        host=Settings.POSTGRES_HOST,
-        database=Settings.POSTGRES_DB,
-        user=Settings.POSTGRES_USER,
-        password=Settings.POSTGRES_PASSWORD,
-    )
-    cur = conn.cursor()
-
-
-
-    cur.close()
-    conn.close()
-    log("fermeture de la connexion PostgreSQL")
+def importLogServer():
+    importMyreport_cpu_full()
+    importMyreport_espace_disque_full()
+    importMyreport_ping_full()
+    importMyreport_ram_full()
+    importMyreport_reseau_full()
+    importMyreport_sql_general_full()
+    importMyreport_sql_gestionairedememoire_full()
+    importMyreport_sql_lock_full()
+    importMyreport_sql_statistic_full()
+    importMyreport_swap_full()
