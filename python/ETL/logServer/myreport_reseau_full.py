@@ -24,7 +24,7 @@ def import_myreport_reseau_full():
                 if any("Sommes" in value for value in row.values()):
                     continue
                 cur.execute("""INSERT INTO myreport_reseau (
-                        Date, heureDate_RAW,
+                        date_heure,date_heure_raw,
                         Somme_Volume, Somme_Volume_RAW,  Somme_Debit, Somme_Debit_RAW,
                         Trafic_Entrant_Volume, Trafic_Entrant_Volume_RAW, Trafic_Entrant_Debit, Trafic_Entrant_Debit_RAW,
                         Trafic_Sortant_Volume, Trafic_Sortant_Volume_RAW, Trafic_Sortant_Debit, Trafic_Sortant_Debit_RAW,

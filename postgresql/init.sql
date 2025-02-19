@@ -5,9 +5,9 @@
 -- ALTER ROLE supever WITH SUPERUSER;
 
 -- create the table "logOK";
-CREATE TABLE logOK (
-	ident BIGSERIAL, 
-	dt_insertion timestamp, 
+CREATE TABLE IF NOT EXISTS logOK (
+	ident BIGSERIAL, -- champs autoincrement
+	dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
 	server_version VARCHAR(255),
 	client_version VARCHAR(255),
 	model VARCHAR(255),
@@ -39,9 +39,9 @@ CREATE TABLE logOK (
 );
 
 -- create the table "logERR";
-CREATE TABLE logERR (
-	ident BIGSERIAL,
-	date_insertion TIMESTAMP, 
+CREATE TABLE IF NOT EXISTS logERR (
+	ident BIGSERIAL, -- champs autoincrement
+	dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
 	server_version VARCHAR(255),
 	client_version VARCHAR(255),
 	product VARCHAR(255),
@@ -64,10 +64,11 @@ CREATE TABLE logERR (
 );
 
 -- create the table "myreport_ping";
-CREATE TABLE myreport_ping (
-	ident BIGSERIAL,
-	date_et_heure varchar(255),
-	date_et_heure_raw decimal,
+CREATE TABLE IF NOT EXISTS myreport_ping (
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
 	temps_du_ping varchar(255),
 	temps_du_ping_raw decimal,
 	minimum VARCHAR(255),
@@ -85,9 +86,10 @@ CREATE TABLE myreport_ping (
 -- création de la table myreport_cpu
 CREATE TABLE IF NOT EXISTS myreport_cpu
 (
-	ident BIGSERIAL,
-    Date VARCHAR(255),--il y aura un traitement à faire sur les données
-    heureDate_RAW REAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
     Somme VARCHAR(255),
     Somme_RAW REAL,
     Processeur_1 VARCHAR(255),
@@ -116,8 +118,9 @@ CREATE TABLE IF NOT EXISTS myreport_cpu
 -- création de la table myreport_ram
 CREATE TABLE IF NOT EXISTS myreport_ram
 (
-	ident BIGSERIAL,
-	date_heure VARCHAR(30),
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
     date_heure_raw REAL,
     memoire_disponible_pct VARCHAR(255),
     memoire_disponible_pct_RAW REAL,
@@ -132,9 +135,10 @@ CREATE TABLE IF NOT EXISTS myreport_ram
 -- création de la table myreport_reseau
 CREATE TABLE IF NOT EXISTS myreport_reseau
 (
-    ident BIGSERIAL,
-    Date VARCHAR(255),--il y aura un traitement à faire sur les données
-    heureDate_RAW REAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
     Somme_Volume VARCHAR(255),
     Somme_Volume_RAW REAL,
     Somme_Debit VARCHAR(255),
@@ -204,9 +208,10 @@ CREATE TABLE IF NOT EXISTS myreport_reseau
 -- création de la table myreport_memoire
 CREATE TABLE IF NOT EXISTS myreport_memoire
 (
-	ident BIGSERIAL,
-    Date VARCHAR(255), --il y aura un traitement à faire sur les données
-    heureDate_RAW REAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
     MemConnexion VARCHAR(255),
     MemConnexion_RAW REAL,
     MemOptimiseur VARCHAR(255),
@@ -226,9 +231,10 @@ CREATE TABLE IF NOT EXISTS myreport_memoire
 -- création de la table myreport_sql_lock
 CREATE TABLE IF NOT EXISTS myreport_sql_lock
 (
-    ident BIGSERIAL,
-	date_heure VARCHAR(255),
-    date_heure_RAW REAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
     nombre_requetes_verrouillage VARCHAR(255),
     nombre_requetes_verrouillage_RAW REAL,
     temps_attente_moyen VARCHAR(255),
@@ -244,9 +250,10 @@ CREATE TABLE IF NOT EXISTS myreport_sql_lock
 -- création de la table myreport_swap
 CREATE TABLE IF NOT EXISTS myreport_swap
 (
-	ident BIGSERIAL,
-    date_heure VARCHAR(255), --il y aura un traitement à faire sur les données
-    date_heure_RAW REAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
+    date_heure_raw REAL,
     Total VARCHAR(255),
     Total_RAW REAL,
     Temps_mort_mem VARCHAR(255),
@@ -258,8 +265,9 @@ CREATE TABLE IF NOT EXISTS myreport_swap
 -- création de la table myreport_sql_statistic
 CREATE TABLE IF NOT EXISTS myreport_sql_statistic
 (
-	ident BIGSERIAL,
-    date_heure VARCHAR(255),
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
     date_heure_raw REAL,
     nombre_requetes_lots VARCHAR(255),
     nombre_requetes_lots_raw REAL,
@@ -277,8 +285,9 @@ CREATE TABLE IF NOT EXISTS myreport_sql_statistic
 -- création de la table myreport_espace_disque
 CREATE TABLE IF NOT EXISTS myreport_espace_disque
 (
-	ident BIGSERIAL,
-	date_heure VARCHAR(255),
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
+ 	date_heure VARCHAR(255),
     date_heure_raw REAL,
     somme VARCHAR(255),
     somme_RAW REAL,
@@ -299,7 +308,8 @@ CREATE TABLE IF NOT EXISTS myreport_espace_disque
 -- création de la table myreport_sql_general
 CREATE TABLE IF NOT EXISTS myreport_sql_general
 (
-	ident BIGSERIAL,
+	ident BIGSERIAL, -- champs autoincrement
+    dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
 	date_heure VARCHAR(255),
     date_heure_raw REAL,
     Connexions_user VARCHAR(255),
@@ -317,7 +327,7 @@ CREATE TABLE IF NOT EXISTS myreport_sql_general
 -- création de la table DashboardLogs
 CREATE TABLE IF NOT EXISTS DashboardLogs
 (
-	ident BIGSERIAL,
+	ident BIGSERIAL, -- champs autoincrement
     Id REAL,
 	DatetimeLog VARCHAR(255),
     Login VARCHAR(255),
@@ -333,7 +343,7 @@ CREATE TABLE IF NOT EXISTS DashboardLogs
 -- création de la table DistributionLogs
 CREATE TABLE IF NOT EXISTS DistributionLogs
 (
-	ident BIGSERIAL,
+	ident BIGSERIAL, -- champs autoincrement
     Id REAL,
 	DatetimeLog VARCHAR(255),
     Login VARCHAR(255),
@@ -350,7 +360,7 @@ CREATE TABLE IF NOT EXISTS DistributionLogs
 -- création de la table FieldLogs
 CREATE TABLE IF NOT EXISTS FieldLogs
 (
-	ident BIGSERIAL,
+	ident BIGSERIAL, -- champs autoincrement
     Id REAL,
 	DatetimeLog VARCHAR(255),
     ModelId VARCHAR(255),
@@ -382,7 +392,7 @@ CREATE TABLE IF NOT EXISTS FieldLogs
 -- création de la table dataset
 CREATE TABLE IF NOT EXISTS dataset
 (
-    ident BIGSERIAL,
+	ident BIGSERIAL, -- champs autoincrement
     time TIMESTAMP,
     Column_Name_Error REAL,
     Connection_Timeout_Error REAL,

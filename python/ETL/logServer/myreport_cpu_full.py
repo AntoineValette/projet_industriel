@@ -23,7 +23,8 @@ def import_myreport_cpu_full():
                     continue
                 cur.execute("""
             INSERT INTO myreport_cpu (
-                Date, heureDate_RAW, Somme, Somme_RAW, 
+             	date_heure,date_heure_raw,
+                Somme, Somme_RAW, 
                 Processeur_1, Processeur_1_RAW, Processeur_2, Processeur_2_RAW, 
                 Processeur_3, Processeur_3_RAW, Processeur_4, Processeur_4_RAW, 
                 Processeur_5, Processeur_5_RAW, Processeur_6, Processeur_6_RAW, 

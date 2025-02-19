@@ -23,8 +23,7 @@ def import_myreport_espace_disque_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_espace_disque (
-                        date_heure, 
-                        date_heure_raw, 
+             	        date_heure,date_heure_raw,
                         somme, 
                         somme_RAW, 
                         octetLibreC, 

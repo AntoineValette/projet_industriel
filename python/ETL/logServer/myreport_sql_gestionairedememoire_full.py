@@ -23,8 +23,7 @@ def import_myreport_sql_gestionairedememoire_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_memoire (
-                        Date, 
-                        heureDate_RAW, 
+                        date_heure,date_heure_raw, 
                         MemConnexion, 
                         MemConnexion_RAW, 
                         MemOptimiseur, 

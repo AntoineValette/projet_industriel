@@ -24,8 +24,7 @@ def import_myreport_sql_statistic_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_sql_statistic (
-                        date_heure, 
-                        date_heure_raw, 
+                        date_heure,date_heure_raw,
                         nombre_requetes_lots, 
                         nombre_requetes_lots_raw, 
                         compilations_sql, 

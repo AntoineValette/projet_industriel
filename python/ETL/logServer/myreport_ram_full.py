@@ -23,8 +23,7 @@ def import_myreport_ram_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_ram (
-                        date_heure, 
-                        date_heure_raw, 
+                        date_heure,date_heure_raw, 
                         memoire_disponible_pct, 
                         memoire_disponible_pct_RAW, 
                         memoire_disponible_go, 

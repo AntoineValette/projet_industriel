@@ -21,7 +21,14 @@ def import_myreport_ping_full():
                     continue
                 if any("Moyennes" in value for value in row.values()):
                     continue
-                cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
+                cur.execute("""INSERT INTO myreport_ping (
+                                date_heure,date_heure_raw,
+                                temps_du_ping, temps_du_ping_raw, 
+                                minimum, minimum_raw, maximum, maximum_raw, 
+                                perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, 
+                                couverture, couverture_raw) 
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                            , tuple(row.values()))
         log("extract myreport_ping_full [ok]")
         conn.commit()
 

@@ -24,8 +24,7 @@ def import_myreport_sql_general_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_sql_general (
-                        date_heure, 
-                        date_heure_raw, 
+                        date_heure,date_heure_raw, 
                         Connexions_user, 
                         Connexions_user_raw, 
                         Connexions, 

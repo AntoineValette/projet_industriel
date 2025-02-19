@@ -23,8 +23,7 @@ def import_myreport_sql_lock_full():
                     continue
                 cur.execute("""
                     INSERT INTO myreport_sql_lock (
-                        date_heure, 
-                        date_heure_RAW, 
+                        date_heure,date_heure_raw, 
                         nombre_requetes_verrouillage, 
                         nombre_requetes_verrouillage_RAW, 
                         temps_attente_moyen, 
