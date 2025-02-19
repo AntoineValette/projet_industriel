@@ -1,62 +1,21 @@
-import psycopg2
 import csv
 import os
-from datetime import datetime
-
 import psycopg2
 
+from core.coreLog import log
 from core.settings import Settings
 
-
-
-def log(message):
-    """Simple fonction de logging."""
-    print(f"[{datetime.now()}] {message}")
-
-def value(n):
-    return ", ".join(["%s"] * n)
-
 def import_csv():
-    # Connexion à la base de données PostgreSQL
-
-    print("Getting ready to load data in import_csv")
     log("Connexion à PostgreSQL établie dans import_csv")
-
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
         database=Settings.POSTGRES_DB,
         user=Settings.POSTGRES_USER,
         password=Settings.POSTGRES_PASSWORD,
     )
-
-    print("Getting ready to load data in import_csv")
-    log("Connexion à PostgreSQL établie dans import_csv")
-
-    # Création d'un curseur pour exécuter des requêtes SQL
     cur = conn.cursor()
 
-    filename = "/data/logETL/241016_LogETL.csv"
-    if os.path.isfile(filename):
-        with open(filename, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-            next(reader)
-            for row in reader:
-                cur.execute("INSERT INTO logOK (server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, etl_startdatetime, launcher_Id, launcher_Name, program_id,program_name, schedules_id, schedules_name, schedules_startdatetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("241016_LogETL - ok")
-        conn.commit()
-
-    filename = "/data/logETL/241016_LogETLError.csv"
-    if os.path.isfile(filename):
-        with open(filename, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-            next(reader)
-            for row in reader:
-                # Insérer la ligne dans la base de données
-                #print(row)
-                cur.execute("INSERT INTO logERR (server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("241016_LogETLError - ok")
-        conn.commit()
-
+    log("import de myreport_ping_full")
     filename = "/data/logServer/myreport_ping_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -68,9 +27,10 @@ def import_csv():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("myreport_ping_full - ok")
+        log("import de myreport_ping_full [ok]")
         conn.commit()
 
+    log("import de myreport_cpu_full")
     filename = "/data/logServer/myreport_cpu_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -98,9 +58,10 @@ def import_csv():
                 %s, %s, %s, %s
             )
             """, tuple(row.values()))
-        log("myreport_cpu_full - ok")
+        log("import de myreport_cpu_full [ok]")
         conn.commit()
 
+    log("import de myreport_ram_full")
     filename = "/data/logServer/myreport_ram_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -129,9 +90,10 @@ def import_csv():
                         %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_ram_full - ok")
+        log("import de myreport_ram_full [ok]")
         conn.commit()
 
+    log("import de myreport_reseau_full")
     filename = "/data/logServer/myreport_reseau_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -231,9 +193,10 @@ def import_csv():
                         %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_reseau_full - ok")
+        log("import de myreport_reseau_full [ok]")
         conn.commit()
 
+    log("import de myreport_espace_disque_full")
     filename = "/data/logServer/myreport_espace_disque_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -269,9 +232,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_espace_disque_full - ok")
+        log("import de myreport_espace_disque_full [ok]")
         conn.commit()
 
+    log("import de myreport_sql_lock_full")
     filename = "/data/logServer/myreport_sql_lock_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -302,9 +266,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-            log("myreport_sql_lock_full - ok")
+            log("import de myreport_sql_lock_full [ok]")
             conn.commit()
 
+    log("import de myreport_swap_full")
     filename = "/data/logServer/myreport_swap_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -329,9 +294,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_swap_full - ok")
+        log("import de myreport_swap_full [ok]")
         conn.commit()
 
+    log("import de myreport_sql_statistic_full")
     filename = "/data/logServer/myreport_sql_statistic_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -362,9 +328,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_sql_statistic_full - ok")
+        log("import de myreport_sql_statistic_full [ok]")
         conn.commit()
 
+    log("import de myreport_espace_disque_full")
     filename = "/data/logServer/myreport_espace_disque_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -400,9 +367,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_espace_disque_full - ok")
+        log("import de myreport_espace_disque_full [ok]")
         conn.commit()
 
+    log("import de myreport_sql_general_full")
     filename = "/data/logServer/myreport_sql_general_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -433,9 +401,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_sql_general_full - ok")
+        log("import de myreport_sql_general_full [ok]")
         conn.commit()
 
+    log("import de dataset_LogETL_LogServer")
     filename = "/data/dataset_LogETL_LogServer.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -553,16 +522,10 @@ def import_csv():
                           %s, %s, %s, %s, %s, %s, %s
                       )
                   """, tuple(row.values()))
-        log("dataset_LogETL_LogServer - ok")
+        log("dataset_LogETL_LogServer [ok]")
         conn.commit()
 
-    # Valider les changements dans la base de données
-    #conn.commit()
-    """on le fait a chaque .csv finalement"""
-
-    # Fermeture du curseur et de la connexion
     cur.close()
     conn.close()
-    log("Connexion PostgreSQL fermée")
-    log("exceution import_csv terminée")
+    log("fermeture de la connexion PostgreSQL")
 
