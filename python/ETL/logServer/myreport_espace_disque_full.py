@@ -15,8 +15,8 @@ def importLogETLerror():
     )
     cur = conn.cursor()
 
-    log("import de myreport_ram_full")
-    filename = "/data/logServer/myreport_ram_full.csv"
+    log("import de myreport_espace_disque_full")
+    filename = "/data/logServer/myreport_espace_disque_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -27,24 +27,31 @@ def importLogETLerror():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("""
-                    INSERT INTO myreport_ram (
+                    INSERT INTO myreport_espace_disque (
                         date_heure, 
                         date_heure_raw, 
-                        memoire_disponible_pct, 
-                        memoire_disponible_pct_RAW, 
-                        memoire_disponible_go, 
-                        memoire_disponible_go_RAW, 
-                        temps_mort_pct, 
-                        temps_mort_raw, 
-                        couverture_pct, 
-                        couverture_raw
+                        somme, 
+                        somme_RAW, 
+                        octetLibreC, 
+                        octetLibreC_Raw, 
+                        espaceDisponibleC, 
+                        espaceDisponibleC_raw, 
+                        octetLibreD, 
+                        octetLibreD_Raw, 
+                        espaceDisponibleD, 
+                        espaceDisponibleD_raw, 
+                        temp_mort, 
+                        temp_mort_raw, 
+                        Couverture, 
+                        Couverture_raw
                     ) VALUES (
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s, 
-                        %s, %s
+                        %s, %s, %s, %s, 
+                        %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_ram_full [ok]")
+        log("import de myreport_espace_disque_full [ok]")
         conn.commit()
 
     cur.close()

@@ -15,7 +15,6 @@ def importLogETLerror():
     )
     cur = conn.cursor()
 
-
     log("import de myreport_cpu_full")
     filename = "/data/logServer/myreport_cpu_full.csv"
     if os.path.isfile(filename):

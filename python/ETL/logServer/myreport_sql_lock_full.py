@@ -15,8 +15,8 @@ def importLogETLerror():
     )
     cur = conn.cursor()
 
-    log("import de myreport_ram_full")
-    filename = "/data/logServer/myreport_ram_full.csv"
+    log("import de myreport_sql_lock_full")
+    filename = "/data/logServer/myreport_sql_lock_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -27,25 +27,27 @@ def importLogETLerror():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("""
-                    INSERT INTO myreport_ram (
+                    INSERT INTO myreport_sql_lock (
                         date_heure, 
-                        date_heure_raw, 
-                        memoire_disponible_pct, 
-                        memoire_disponible_pct_RAW, 
-                        memoire_disponible_go, 
-                        memoire_disponible_go_RAW, 
-                        temps_mort_pct, 
-                        temps_mort_raw, 
-                        couverture_pct, 
-                        couverture_raw
+                        date_heure_RAW, 
+                        nombre_requetes_verrouillage, 
+                        nombre_requetes_verrouillage_RAW, 
+                        temps_attente_moyen, 
+                        temps_attente_moyen_RAW, 
+                        nombre_blocages, 
+                        nombre_blocages_RAW, 
+                        temps_mort, 
+                        temps_mort_RAW, 
+                        couverture, 
+                        couverture_RAW
                     ) VALUES (
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s, 
-                        %s, %s
+                        %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_ram_full [ok]")
-        conn.commit()
+            log("import de myreport_sql_lock_full [ok]")
+            conn.commit()
 
     cur.close()
     conn.close()
