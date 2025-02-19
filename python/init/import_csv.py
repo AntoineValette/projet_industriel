@@ -42,7 +42,7 @@ def import_csv():
             next(reader)
             for row in reader:
                 cur.execute("INSERT INTO logOK (server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, etl_startdatetime, launcher_Id, launcher_Name, program_id,program_name, schedules_id, schedules_name, schedules_startdatetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("241016_LogETL.csv - ok")
+        log("241016_LogETL - ok")
         conn.commit()
 
     filename = "/data/logETL/241016_LogETLError.csv"
@@ -54,7 +54,7 @@ def import_csv():
                 # Insérer la ligne dans la base de données
                 #print(row)
                 cur.execute("INSERT INTO logERR (server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("241016_LogETLError.csv - ok")
+        log("241016_LogETLError - ok")
         conn.commit()
 
     filename = "/data/logServer/myreport_ping_full.csv"
@@ -68,7 +68,7 @@ def import_csv():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("241016_LogETLError.csv - ok")
+        log("myreport_ping_full - ok")
         conn.commit()
 
     filename = "/data/logServer/myreport_cpu_full.csv"
@@ -98,7 +98,7 @@ def import_csv():
                 %s, %s, %s, %s
             )
             """, tuple(row.values()))
-        log("myreport_cpu_full.csv - ok")
+        log("myreport_cpu_full - ok")
         conn.commit()
 
     filename = "/data/logServer/myreport_ram_full.csv"
@@ -129,10 +129,10 @@ def import_csv():
                         %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_ram_full.csv - ok")
+        log("myreport_ram_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_reseau_full.csv"
+    filename = "/data/logServer/myreport_reseau_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -231,10 +231,10 @@ def import_csv():
                         %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_reseau_full.csv - ok")
+        log("myreport_reseau_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_espace_disque_full.csv"
+    filename = "/data/logServer/myreport_espace_disque_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -269,10 +269,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_espace_disque_full.csv - ok")
+        log("myreport_espace_disque_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_sql_lock_full.csv"
+    filename = "/data/logServer/myreport_sql_lock_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -302,10 +302,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-            log("myreport_sql_lock_full.csv - ok")
+            log("myreport_sql_lock_full - ok")
             conn.commit()
 
-    filename = "/data/logETL/myreport_swap_full.csv"
+    filename = "/data/logServer/myreport_swap_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -329,10 +329,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_swap_full.csv - ok")
+        log("myreport_swap_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_sql_statistic_full.csv"
+    filename = "/data/logServer/myreport_sql_statistic_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -362,10 +362,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_sql_statistic_full.csv - ok")
+        log("myreport_sql_statistic_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_espace_disque_full.csv"
+    filename = "/data/logServer/myreport_espace_disque_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -400,10 +400,10 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_espace_disque_full.csv - ok")
+        log("myreport_espace_disque_full - ok")
         conn.commit()
 
-    filename = "/data/logETL/myreport_sql_general_full.csv"
+    filename = "/data/logServer/myreport_sql_general_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -433,7 +433,7 @@ def import_csv():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("myreport_sql_general_full.csv - ok")
+        log("myreport_sql_general_full - ok")
         conn.commit()
 
     filename = "/data/dataset_LogETL_LogServer.csv"
@@ -553,7 +553,7 @@ def import_csv():
                           %s, %s, %s, %s, %s, %s, %s
                       )
                   """, tuple(row.values()))
-        log("dataset_LogETL_LogServer.csv - ok")
+        log("dataset_LogETL_LogServer - ok")
         conn.commit()
 
     # Valider les changements dans la base de données
