@@ -4,7 +4,6 @@
 -- Optionally, if you need superuser privileges:
 -- ALTER ROLE supever WITH SUPERUSER;
 
-
 -- create the table "logOK";
 CREATE TABLE logOK (
 	ident BIGSERIAL, 

@@ -3,7 +3,7 @@ from ETL.logETL.importLogETL import importLogETL
 from ETL.logETL.importLogETLError import importLogETLerror
 from ETL.importMergeDF import importMergeDF
 from ETL.logParquet.import_parquet import import_parquet
-from ETL.logServer.importLogServer import importLogServer
+from ETL.logServer.importLogServer import import_log_server
 
 if __name__ == "__main__":
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     importLogETLerror()
 
     # import des logServer
-    importLogServer()
+    import_log_server()
 
     # import du mergeDF
     importMergeDF()

@@ -5,7 +5,7 @@ import psycopg2
 from core.coreLog import log
 from core.settings import Settings
 
-def importMyreport_swap_full():
+def import_myreport_swap_full():
     log("Connexion à PostgreSQL")
     conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
