@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: postgres
+    type: PostgreSQL
+    access: direct
+    tlsSkipVerify : true
+    uid :
+    url: postgres:5432
+    isDefault: true
+    database : postgres
+    user : admin
+    password : admin
+    jsonData:
+      sslmode: disable
+
