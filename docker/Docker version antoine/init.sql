@@ -383,7 +383,7 @@ CREATE TABLE IF NOT EXISTS FieldLogs
 CREATE TABLE IF NOT EXISTS dataset
 (
     ident BIGSERIAL,
-    Date_et_heure VARCHAR(255),
+    time TIMESTAMP,
     Column_Name_Error REAL,
     Connection_Timeout_Error REAL,
     Create_TABLE_Error REAL,

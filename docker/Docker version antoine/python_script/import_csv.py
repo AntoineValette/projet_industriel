@@ -465,7 +465,7 @@ with open("/data/dataset_LogETL_LogServer.csv", 'r', encoding='utf-8-sig') as f:
         #print(values)
         cur.execute("""
               INSERT INTO dataset (
-                  Date_et_heure,
+                  time,
                   Column_Name_Error,
                   Connection_Timeout_Error,
                   Create_TABLE_Error,
