@@ -5,7 +5,7 @@ import psycopg2
 from core.coreLog import log
 from core.settings import Settings
 
-def import_csv():
+def importMergeDF():
     log("Connexion à PostgreSQL établie dans import_csv")
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
@@ -14,43 +14,6 @@ def import_csv():
         password=Settings.POSTGRES_PASSWORD,
     )
     cur = conn.cursor()
-
-
-
-
-    log("import de myreport_sql_general_full")
-    filename = "/data/logServer/myreport_sql_general_full.csv"
-    if os.path.isfile(filename):
-        with open(filename, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            next(reader)  # Passer la ligne d'en-tête si nécessaire
-            for row in reader:
-                if not row[reader.fieldnames[2]]:
-                    continue
-                if any("Moyennes" in value for value in row.values()):
-                    continue
-                cur.execute("""
-                    INSERT INTO myreport_sql_general (
-                        date_heure, 
-                        date_heure_raw, 
-                        Connexions_user, 
-                        Connexions_user_raw, 
-                        Connexions, 
-                        Connexions_Raw, 
-                        Déconnexions, 
-                        Déconnexions_raw, 
-                        temp_mort, 
-                        temp_mort_raw, 
-                        Couverture, 
-                        Couverture_raw
-                    ) VALUES (
-                        %s, %s, %s, %s, 
-                        %s, %s, %s, %s, 
-                        %s, %s, %s, %s
-                    )
-                """, tuple(row.values()))
-        log("import de myreport_sql_general_full [ok]")
-        conn.commit()
 
     log("import de dataset_LogETL_LogServer")
     filename = "/data/dataset_LogETL_LogServer.csv"

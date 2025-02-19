@@ -5,7 +5,7 @@ import psycopg2
 from core.coreLog import log
 from core.settings import Settings
 
-def importMyreport_swap_full():
+def importMyreport_sql_general_full():
     log("Connexion à PostgreSQL")
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
@@ -15,32 +15,39 @@ def importMyreport_swap_full():
     )
     cur = conn.cursor()
 
-    log("import de myreport_swap_full")
-    filename = "/data/logServer/myreport_swap_full.csv"
+
+    log("import de myreport_sql_general_full")
+    filename = "/data/logServer/myreport_sql_general_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            next(reader)
+            next(reader)  # Passer la ligne d'en-tête si nécessaire
             for row in reader:
                 if not row[reader.fieldnames[2]]:
                     continue
                 if any("Moyennes" in value for value in row.values()):
                     continue
-                cur.execute("""INSERT INTO myreport_swap (
+                cur.execute("""
+                    INSERT INTO myreport_sql_general (
                         date_heure, 
-                        date_heure_RAW, 
-                        Total, 
-                        Total_RAW, 
-                        temps_mort_mem, 
-                        temps_mort_mem_RAW,
-                        couverture_mem, 
-                        couverture_mem_RAW
+                        date_heure_raw, 
+                        Connexions_user, 
+                        Connexions_user_raw, 
+                        Connexions, 
+                        Connexions_Raw, 
+                        Déconnexions, 
+                        Déconnexions_raw, 
+                        temp_mort, 
+                        temp_mort_raw, 
+                        Couverture, 
+                        Couverture_raw
                     ) VALUES (
+                        %s, %s, %s, %s, 
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_swap_full [ok]")
+        log("import de myreport_sql_general_full [ok]")
         conn.commit()
 
     cur.close()

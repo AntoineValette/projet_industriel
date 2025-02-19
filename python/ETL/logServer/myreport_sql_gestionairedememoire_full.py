@@ -5,7 +5,7 @@ import psycopg2
 from core.coreLog import log
 from core.settings import Settings
 
-def importLogETLerror():
+def importMyreport_sql_gestionairedememoire_full():
     log("Connexion à PostgreSQL")
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
@@ -15,8 +15,8 @@ def importLogETLerror():
     )
     cur = conn.cursor()
 
-    log("import de myreport_espace_disque_full")
-    filename = "/data/logServer/myreport_espace_disque_full.csv"
+    log("import de myreport_sql_gestionairedememoire_full")
+    filename = "/data/logServer/myreport_sql_gestionairedememoire_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -51,7 +51,7 @@ def importLogETLerror():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_espace_disque_full [ok]")
+        log("import de myreport_sql_gestionairedememoire_full [ok]")
         conn.commit()
 
     cur.close()

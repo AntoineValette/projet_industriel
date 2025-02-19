@@ -5,7 +5,7 @@ import psycopg2
 from core.coreLog import log
 from core.settings import Settings
 
-def importLogETLerror():
+def importMyreport_espace_disque_full():
     log("Connexion à PostgreSQL")
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
