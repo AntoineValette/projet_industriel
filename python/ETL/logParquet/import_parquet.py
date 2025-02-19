@@ -5,18 +5,13 @@ import psycopg2
 from fastparquet import ParquetFile
 
 from core.settings import Settings
-
-
-def log(message):
-    """Simple fonction de logging."""
-    print(f"[{datetime.now()}] {message}")
+from core.coreLog import log
 
 def import_parquet():
     log("Début du script")
 
     conn = psycopg2.connect(Settings.POSTGRES_URL)
 
-    print("Getting ready to load data in import_parquet")
     log("Connexion à PostgreSQL établie dans import_parquet")
 
     # Charger le fichier Parquet

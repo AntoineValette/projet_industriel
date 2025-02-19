@@ -6,13 +6,13 @@ from core.coreLog import log
 from core.settings import Settings
 
 def import_myreport_reseau_full():
-    log("Connexion à PostgreSQL")
-    conn = psycopg2.connect(Settings.POSTGRES_URL)
-    cur = conn.cursor()
-
-    log("extract myreport_reseau_full")
     filename = "/data/logServer/myreport_reseau_full.csv"
     if os.path.isfile(filename):
+        log("PostgreSQL - open")
+        conn = psycopg2.connect(Settings.POSTGRES_URL)
+        cur = conn.cursor()
+
+        log("extract myreport_reseau_full")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             next(reader)
@@ -72,7 +72,10 @@ def import_myreport_reseau_full():
                 """, tuple(row.values()))
         log("extract myreport_reseau_full [ok]")
         conn.commit()
+        cur.close()
 
-    cur.close()
-    conn.close()
-    log("fermeture de la connexion PostgreSQL")
+        log("transform myreport_reseau_full ...")
+        log("load myreport_reseau_full ...")
+
+        conn.close()
+        log("PostgreSQL - close")

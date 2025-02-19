@@ -6,13 +6,13 @@ from core.coreLog import log
 from core.settings import Settings
 
 def import_myreport_cpu_full():
-    log("Connexion à PostgreSQL")
-    conn = psycopg2.connect(Settings.POSTGRES_URL)
-    cur = conn.cursor()
-
-    log("extract myreport_cpu_full")
     filename = "/data/logServer/myreport_cpu_full.csv"
     if os.path.isfile(filename):
+        log("PostgreSQL - open")
+        conn = psycopg2.connect(Settings.POSTGRES_URL)
+        cur = conn.cursor()
+
+        log("extract myreport_cpu_full")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             next(reader)
@@ -41,12 +41,10 @@ def import_myreport_cpu_full():
             """, tuple(row.values()))
         log("extract myreport_cpu_full [ok]")
         conn.commit()
+        cur.close()
 
-        # partie transformation
+        log("transform myreport_cpu_full ...")
+        log("load myreport_cpu_full ...")
 
-
-        # partie chargement
-
-    cur.close()
-    conn.close()
-    log("fermeture de la connexion PostgreSQL")
+        conn.close()
+        log("PostgreSQL - close")

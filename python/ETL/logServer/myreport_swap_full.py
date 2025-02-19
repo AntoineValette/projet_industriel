@@ -37,6 +37,8 @@ def import_myreport_swap_full():
                     )
                 """, tuple(row.values()))
         log("extract myreport_swap_full [ok]")
+        conn.commit()
+        cur.close()
 
         # transform
         #log("transform myreport_swap_full ...")
@@ -67,8 +69,5 @@ def import_myreport_swap_full():
         #log("load myreport_swap_full ...")
         #tab.to_sql("myreport_swap_filtered", conn, if_exists='append', index=False)
 
-        conn.commit()
-
-        cur.close()
         conn.close()
         log("PostgreSQL - close")
