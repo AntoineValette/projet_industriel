@@ -412,7 +412,7 @@ def import_csv():
             for row in reader:
                 cur.execute("""
                       INSERT INTO dataset (
-                          Date_et_heure,
+                          time,
                           Column_Name_Error,
                           Connection_Timeout_Error,
                           Create_TABLE_Error,
