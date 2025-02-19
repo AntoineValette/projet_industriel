@@ -10,7 +10,7 @@ def import_myreport_ping_full():
     conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
-    log("import de myreport_ping_full")
+    log("extract myreport_ping_full")
     filename = "/data/logServer/myreport_ping_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -22,7 +22,7 @@ def import_myreport_ping_full():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-        log("import de myreport_ping_full [ok]")
+        log("extract myreport_ping_full [ok]")
         conn.commit()
 
 

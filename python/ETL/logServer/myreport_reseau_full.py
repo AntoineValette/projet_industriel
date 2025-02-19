@@ -10,7 +10,7 @@ def import_myreport_reseau_full():
     conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
-    log("import de myreport_reseau_full")
+    log("extract myreport_reseau_full")
     filename = "/data/logServer/myreport_reseau_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -70,7 +70,7 @@ def import_myreport_reseau_full():
                         %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_reseau_full [ok]")
+        log("extract myreport_reseau_full [ok]")
         conn.commit()
 
     cur.close()

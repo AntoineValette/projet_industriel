@@ -10,7 +10,7 @@ def import_myreport_cpu_full():
     conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
-    log("import de myreport_cpu_full")
+    log("extract myreport_cpu_full")
     filename = "/data/logServer/myreport_cpu_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -38,8 +38,13 @@ def import_myreport_cpu_full():
                 %s, %s, %s, %s
             )
             """, tuple(row.values()))
-        log("import de myreport_cpu_full [ok]")
+        log("extract myreport_cpu_full [ok]")
         conn.commit()
+
+        # partie transformation
+
+
+        # partie chargement
 
     cur.close()
     conn.close()

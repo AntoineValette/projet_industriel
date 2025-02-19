@@ -10,7 +10,7 @@ def import_myreport_sql_gestionairedememoire_full():
     conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
-    log("import de myreport_sql_gestionairedememoire_full")
+    log("extract myreport_sql_gestionairedememoire_full")
     filename = "/data/logServer/myreport_sql_gestionairedememoire_full.csv"
     if os.path.isfile(filename):
         with open(filename, 'r', encoding='utf-8-sig') as f:
@@ -46,7 +46,7 @@ def import_myreport_sql_gestionairedememoire_full():
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("import de myreport_sql_gestionairedememoire_full [ok]")
+        log("extract myreport_sql_gestionairedememoire_full [ok]")
         conn.commit()
 
     cur.close()
