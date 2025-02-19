@@ -143,14 +143,6 @@ def import_parquet():
     batch_size = 500000
     total_rows = 0
 
-    # Connexion à la base de données
-    conn = psycopg2.connect(
-        host="postgres",
-        database="postgres",
-        user="supever",
-        password="DORsupever2025"
-    )
-
     # Insérer les données en utilisant COPY
     for i in range(0, pf_count, batch_size):
         log(f"Lecture des lignes {i} à {min(i + batch_size, pf_count)}")
