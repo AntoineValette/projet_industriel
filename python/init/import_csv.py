@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import os
 
 import psycopg2
 
@@ -10,8 +11,15 @@ def log(message):
     """Simple fonction de logging."""
     print(f"[{datetime.now()}] {message}")
 
+def value(n):
+    return ", ".join(["%s"] * n)
+
 def import_csv():
     # Connexion à la base de données PostgreSQL
+
+    print("Getting ready to load data in import_csv")
+    log("Connexion à PostgreSQL établie dans import_csv")
+
     conn = psycopg2.connect(
         host=Settings.POSTGRES_HOST,
         database=Settings.POSTGRES_DB,
@@ -19,54 +27,48 @@ def import_csv():
         password=Settings.POSTGRES_PASSWORD,
     )
 
-    base = Settings.BASE_DIR
-    print(base)
-
-    print("Getting ready to load data in import_csv")
-    log("Connexion à PostgreSQL établie dans import_csv")
-
     # Création d'un curseur pour exécuter des requêtes SQL
     cur = conn.cursor()
 
-    # Ouverture du fichier CSV
-    with open("/data/logEtl/241016_LogETL.csv", 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-        next(reader)
-        for row in reader:
-            # Insérer la ligne dans la base de données
-            #print(row)
-            cur.execute("INSERT INTO logOK (server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, etl_startdatetime, launcher_Id, launcher_Name, program_id,program_name, schedules_id, schedules_name, schedules_startdatetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-    log("241016_LogETL.csv - ok")
-    conn.commit()
+    logTypeETL = [
+        { "name" : "241016_LogETL.csv", "table": "logOK", "query" : "" , "value": value(28), "path" : "/data/logEtl/241016_LogETL.csv"},
+        {"name" : "241016_LogETLError.csv", "table": "logERR", "query" : "" , "value": value(19), "path" : "/data/logEtl/241016_LogETLError.csv"},
+    ]
 
-    # Ouverture du fichier CSV
-    with open("/data/logEtl/241016_LogETLError.csv", 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
-        next(reader)
-        for row in reader:
-            # Insérer la ligne dans la base de données
-            #print(row)
-            cur.execute("INSERT INTO logERR (server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-    log("241016_LogETLError.csv - ok")
-    conn.commit()
+    for item in logTypeETL:
+        if os.path.exists(item["path"]):
+            with open(item["path"], 'r', encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+                next(reader)
+                for row in reader:
+                    cur.execute(item["query"], tuple(row.values()))
+            conn.commit()
+            log(item["name"], " - ok")
+        else:
+            log("pas de fichier ", item["name"])
+
+    query = (
+             "server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, "
+             "rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, "
+             "project_name, product, resultat, etl_startdatetime, launcher_Id, launcher_Name, program_id,program_name, "
+             "schedules_id, schedules_name, schedules_startdatetime)")
+
+    # "server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime"
+
+    # "INSERT INTO table () "
+    # "VALUES ()"
 
     # Ouverture du fichier CSV et insertion des données
     with open("/data/logServer/myreport_ping_full.csv", 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
-            #print(reader.fieldnames)
             if not row[reader.fieldnames[2]]:
-                #print(row[reader.fieldnames[0]])
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
-    log("241016_LogETLError.csv - ok")
+    log("myreport_ping_full.csv - ok")
     conn.commit()
 
     # Ouverture du fichier CSV et insertion des données
@@ -75,14 +77,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-                #print(row[reader.fieldnames[0]])
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""
         INSERT INTO myreport_cpu (
             Date, heureDate_RAW, Somme, Somme_RAW, 
@@ -109,14 +106,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-               # print(row[reader.fieldnames[0]])
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""
                 INSERT INTO myreport_ram (
                     date_heure, 
@@ -144,17 +136,11 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
             if any("Sommes" in value for value in row.values()):
-                #print(f'Ligne ignorée (somme détectée) : {row}')
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
-            #print("Nombre de valeurs :", len(tuple(row.values())))
             cur.execute("""INSERT INTO myreport_reseau (
                     Date,
                     heureDate_RAW,
@@ -251,13 +237,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""
                 INSERT INTO myreport_memoire (
                     Date, 
@@ -286,41 +268,42 @@ def import_csv():
     log("myreport_espace_disque_full.csv - ok")
     conn.commit()
 
-    # Ouverture du fichier CSV et insertion des données
-    with open("/data/logServer/myreport_sql_lock_full.csv", 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-        next(reader)  # Passer la ligne d'en-tête si nécessaire
-        for row in reader:
-            if not row[reader.fieldnames[2]]:
-                #print("ligne ignorée")
-                continue
-            if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
-                continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
-            cur.execute("""
-                INSERT INTO myreport_sql_lock (
-                    date_heure, 
-                    date_heure_RAW, 
-                    nombre_requetes_verrouillage, 
-                    nombre_requetes_verrouillage_RAW, 
-                    temps_attente_moyen, 
-                    temps_attente_moyen_RAW, 
-                    nombre_blocages, 
-                    nombre_blocages_RAW, 
-                    temps_mort, 
-                    temps_mort_RAW, 
-                    couverture, 
-                    couverture_RAW
-                ) VALUES (
-                    %s, %s, %s, %s, 
-                    %s, %s, %s, %s, 
-                    %s, %s, %s, %s
-                )
-            """, tuple(row.values()))
-    log("myreport_sql_lock_full.csv - ok")
-    conn.commit()
+    file_path = "/data/logServer/myreport_sql_lock_full.csv"
+    if os.path.exists(file_path):
+        # Ouverture du fichier CSV et insertion des données
+        with open(file_path, 'r', encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+            next(reader)  # Passer la ligne d'en-tête si nécessaire
+            for row in reader:
+                if not row[reader.fieldnames[2]]:
+                    continue
+                if any("Moyennes" in value for value in row.values()):
+                    continue
+                cur.execute("""
+                    INSERT INTO myreport_sql_lock (
+                        date_heure, 
+                        date_heure_RAW, 
+                        nombre_requetes_verrouillage, 
+                        nombre_requetes_verrouillage_RAW, 
+                        temps_attente_moyen, 
+                        temps_attente_moyen_RAW, 
+                        nombre_blocages, 
+                        nombre_blocages_RAW, 
+                        temps_mort, 
+                        temps_mort_RAW, 
+                        couverture, 
+                        couverture_RAW
+                    ) VALUES (
+                        %s, %s, %s, %s, 
+                        %s, %s, %s, %s, 
+                        %s, %s, %s, %s
+                    )
+                """, tuple(row.values()))
+        log("myreport_sql_lock_full.csv - ok")
+        conn.commit()
+    else:
+        log(f"Le fichier {file_path} n'existe pas.")
+
 
     # Ouverture du fichier CSV et insertion des données
     with open("/data/logServer/myreport_swap_full.csv", 'r', encoding='utf-8-sig') as f:
@@ -328,13 +311,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-               # print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""INSERT INTO myreport_swap (
                     date_heure, 
                     date_heure_RAW, 
@@ -358,12 +337,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-                #print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-               # print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
             # Insérer la ligne dans la table
             cur.execute("""
                 INSERT INTO myreport_sql_statistic (
@@ -394,13 +370,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-               # print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""
                 INSERT INTO myreport_espace_disque (
                     date_heure, 
@@ -435,13 +407,9 @@ def import_csv():
         next(reader)  # Passer la ligne d'en-tête si nécessaire
         for row in reader:
             if not row[reader.fieldnames[2]]:
-               # print("ligne ignorée")
                 continue
             if any("Moyennes" in value for value in row.values()):
-                #print(f"Ligne ignorée (moyenne détectée) : {row}")
                 continue
-            #print(tuple(row.values()))
-            # Insérer la ligne dans la table
             cur.execute("""
                 INSERT INTO myreport_sql_general (
                     date_heure, 
@@ -469,8 +437,6 @@ def import_csv():
     with open("/data/dataset_LogETL_LogServer.csv", 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
-            # Debug print (optional)
-            #print(values)
             cur.execute("""
                   INSERT INTO dataset (
                       Date_et_heure,

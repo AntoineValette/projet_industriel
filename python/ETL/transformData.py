@@ -2,7 +2,7 @@
 
 import sys
 
-# name : dagMDF.py
+# name : transformData.py
 # author :
 # version :
 # desc : python script to transform raw data to a time serie data frame
@@ -13,17 +13,17 @@ import matplotlib.pyplot as plt
 from core.settings import Settings
 
 
-class DagMDF:
+class transformData:
 
 
     def extract(self):
-        print(time.time(),' - Extracting DagMDF')
+        print(time.time(),' - Extracting')
 
 
     def transform(self):
-        print(time.time(),' - Transforming DagMDF')
+        print(time.time(),' - Transforming')
 
     def load(self):
-        print(time.time(),' - Loading DagMDF')
+        print(time.time(),' - Loading')
 
 
