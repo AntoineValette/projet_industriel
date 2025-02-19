@@ -29,7 +29,7 @@ services:
       postgres:
           condition: service_healthy
     volumes:
-      - ./conf/servers.json:/pgadmin4/servers.json
+      - ./conf/postgresql/servers.json:/pgadmin4/servers.json
 
   python_app:
     container_name: dor_scripts
