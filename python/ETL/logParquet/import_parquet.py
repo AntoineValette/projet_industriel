@@ -14,13 +14,7 @@ def log(message):
 def import_parquet():
     log("Début du script")
 
-    # Connexion à la base de données PostgreSQL
-    conn = psycopg2.connect(
-        host=Settings.POSTGRES_HOST,
-        database=Settings.POSTGRES_DB,
-        user=Settings.POSTGRES_USER,
-        password=Settings.POSTGRES_PASSWORD,
-    )
+    conn = psycopg2.connect(Settings.POSTGRES_URL)
 
     print("Getting ready to load data in import_parquet")
     log("Connexion à PostgreSQL établie dans import_parquet")

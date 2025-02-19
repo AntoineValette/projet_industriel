@@ -7,12 +7,7 @@ from core.settings import Settings
 
 def importMyreport_ping_full():
     log("Connexion à PostgreSQL")
-    conn = psycopg2.connect(
-        host=Settings.POSTGRES_HOST,
-        database=Settings.POSTGRES_DB,
-        user=Settings.POSTGRES_USER,
-        password=Settings.POSTGRES_PASSWORD,
-    )
+    conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
     log("import de myreport_ping_full")
@@ -29,6 +24,8 @@ def importMyreport_ping_full():
                 cur.execute("INSERT INTO myreport_ping (date_et_heure, date_et_heure_raw, temps_du_ping, temps_du_ping_raw, minimum, minimum_raw, maximum, maximum_raw, perte_de_paquets, perte_de_paquets_raw, temps_mort, temps_mort_raw, couverture, couverture_raw) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(row.values()))
         log("import de myreport_ping_full [ok]")
         conn.commit()
+
+
 
     cur.close()
     conn.close()

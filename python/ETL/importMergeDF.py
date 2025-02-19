@@ -7,12 +7,7 @@ from core.settings import Settings
 
 def importMergeDF():
     log("Connexion à PostgreSQL établie dans import_csv")
-    conn = psycopg2.connect(
-        host=Settings.POSTGRES_HOST,
-        database=Settings.POSTGRES_DB,
-        user=Settings.POSTGRES_USER,
-        password=Settings.POSTGRES_PASSWORD,
-    )
+    conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
     log("import de dataset_LogETL_LogServer")

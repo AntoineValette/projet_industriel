@@ -12,4 +12,6 @@ class Settings():
 
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+    POSTGRES_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}"
+
 settings = Settings()

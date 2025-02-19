@@ -7,12 +7,7 @@ from core.settings import Settings
 
 def importMyreport_sql_gestionairedememoire_full():
     log("Connexion à PostgreSQL")
-    conn = psycopg2.connect(
-        host=Settings.POSTGRES_HOST,
-        database=Settings.POSTGRES_DB,
-        user=Settings.POSTGRES_USER,
-        password=Settings.POSTGRES_PASSWORD,
-    )
+    conn = psycopg2.connect(Settings.POSTGRES_URL)
     cur = conn.cursor()
 
     log("import de myreport_sql_gestionairedememoire_full")
