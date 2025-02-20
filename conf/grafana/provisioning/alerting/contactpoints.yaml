@@ -1,0 +1,11 @@
+apiVersion: 1
+contactPoints:
+    - orgId: 1
+      name: Teams
+      receivers:
+        - uid: dedkkxcw0k6wwf
+          type: teams
+          settings:
+            title: '{{ template "msteams.default.title" . }}'
+            url: https://prod-216.westeurope.logic.azure.com:443/workflows/2ba6568881a847f7a6ceea7d016482a0/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=IKK6KEFjGvPSxMTS9klabztEu0ApwHSRM4zFr5r_aI8
+          disableResolveMessage: false

@@ -55,7 +55,7 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./conf/grafana/provisioning:/etc/grafana/provisioning
-      - ./conf/grafana/import:/import
+      - ./conf/grafana/dashboards:/import
     depends_on:
       postgres:
           condition: service_healthy
