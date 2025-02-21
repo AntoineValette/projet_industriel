@@ -2,17 +2,17 @@ import csv
 import os
 import psycopg2
 
-from core.coreLog import log
+from core.log import log
 from core.settings import Settings
 
-def import_myreport_ram_full():
-    filename = "/data/logServer/myreport_ram_full.csv"
+def myreport_sql_lock():
+    filename = "/data/logServer/myreport_sql_lock_full.csv"
     if os.path.isfile(filename):
         log("PostgreSQL - open")
         conn = psycopg2.connect(Settings.POSTGRES_URL)
         cur = conn.cursor()
 
-        log("extract myreport_ram_full")
+        log("+-- extract myreport_sql_lock")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             next(reader)  # Passer la ligne d'en-tête si nécessaire
@@ -22,28 +22,29 @@ def import_myreport_ram_full():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("""
-                    INSERT INTO myreport_ram (
+                    INSERT INTO myreport_sql_lock (
                         date_heure,date_heure_raw, 
-                        memoire_disponible_pct, 
-                        memoire_disponible_pct_RAW, 
-                        memoire_disponible_go, 
-                        memoire_disponible_go_RAW, 
-                        temps_mort_pct, 
-                        temps_mort_raw, 
-                        couverture_pct, 
-                        couverture_raw
+                        nombre_requetes_verrouillage, 
+                        nombre_requetes_verrouillage_RAW, 
+                        temps_attente_moyen, 
+                        temps_attente_moyen_RAW, 
+                        nombre_blocages, 
+                        nombre_blocages_RAW, 
+                        temps_mort, 
+                        temps_mort_RAW, 
+                        couverture, 
+                        couverture_RAW
                     ) VALUES (
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s, 
-                        %s, %s
-                    )
-                """, tuple(row.values()))
-        log("extract myreport_ram_full [ok]")
+                        %s, %s, %s, %s
+                    )""", tuple(row.values()))
+        log("+-- extract myreport_sql_lock [ok]")
         conn.commit()
         cur.close()
 
-        log("transform myreport_ram_full ...")
-        log("load myreport_ram_full ...")
+        log("+-- transform myreport_sql_lock ...")
+        log("+-- load myreport_sql_lock ...")
 
         conn.close()
         log("PostgreSQL - close")

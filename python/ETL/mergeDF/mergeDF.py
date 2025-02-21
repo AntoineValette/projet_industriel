@@ -2,17 +2,17 @@ import csv
 import os
 import psycopg2
 
-from core.coreLog import log
+from core.log import log
 from core.settings import Settings
 
-def importMergeDF():
-    log("Connexion à PostgreSQL établie dans import_csv")
-    conn = psycopg2.connect(Settings.POSTGRES_URL)
-    cur = conn.cursor()
-
-    log("import de dataset_LogETL_LogServer")
+def mergeDF():
     filename = "/data/dataset_LogETL_LogServer.csv"
     if os.path.isfile(filename):
+        log("Connexion à PostgreSQL établie dans import_csv")
+        conn = psycopg2.connect(Settings.POSTGRES_URL)
+        cur = conn.cursor()
+
+        log("extract dataset_LogETL_LogServer")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             for row in reader:
@@ -131,7 +131,7 @@ def importMergeDF():
         log("dataset_LogETL_LogServer [ok]")
         conn.commit()
 
-    cur.close()
-    conn.close()
-    log("fermeture de la connexion PostgreSQL")
+        cur.close()
+        conn.close()
+        log("fermeture de la connexion PostgreSQL")
 

@@ -1,22 +1,23 @@
-from ETL.logETL.importLogETL import importLogETL
-from ETL.logETL.importLogETLError import importLogETLerror
+from ETL.logETL.logETL import logETL
+from ETL.logETL.logETLError import logEtlError
 from ETL.logParquet.import_parquet import import_parquet
-from ETL.logServer.importLogServer import import_log_server
-from ETL.mergeDF.importMergeDF import importMergeDF
+from ETL.logServer.logServer import logServer
+from ETL.mergeDF.mergeDF import mergeDF
 from core.wait_for_postgres import wait_for_postgres
 
 if __name__ == "__main__":
-
+    # attente de postgresql
     wait_for_postgres()
+
     # import des logETl ok et error
-    importLogETL()
-    importLogETLerror()
+    logETL()
+    logEtlError()
 
     # import des logServer
-    import_log_server()
+    logServer()
 
     # import du mergeDF
-    importMergeDF()
+    mergeDF()
 
     # import des logParquets
     import_parquet()

@@ -2,17 +2,17 @@ import csv
 import os
 import psycopg2
 
-from core.coreLog import log
+from core.log import log
 from core.settings import Settings
 
-def import_myreport_espace_disque_full():
-    filename = "/data/logServer/myreport_espace_disque_full.csv"
+def myreport_sql_general():
+    filename = "/data/logServer/myreport_sql_general_full.csv"
     if os.path.isfile(filename):
         log("PostgreSQL - open")
         conn = psycopg2.connect(Settings.POSTGRES_URL)
         cur = conn.cursor()
 
-        log("extract myreport_espace_disque_full")
+        log("+-- extract myreport_sql_general")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             next(reader)  # Passer la ligne d'en-tête si nécessaire
@@ -22,18 +22,14 @@ def import_myreport_espace_disque_full():
                 if any("Moyennes" in value for value in row.values()):
                     continue
                 cur.execute("""
-                    INSERT INTO myreport_espace_disque (
-             	        date_heure,date_heure_raw,
-                        somme, 
-                        somme_RAW, 
-                        octetLibreC, 
-                        octetLibreC_Raw, 
-                        espaceDisponibleC, 
-                        espaceDisponibleC_raw, 
-                        octetLibreD, 
-                        octetLibreD_Raw, 
-                        espaceDisponibleD, 
-                        espaceDisponibleD_raw, 
+                    INSERT INTO myreport_sql_general (
+                        date_heure,date_heure_raw, 
+                        Connexions_user, 
+                        Connexions_user_raw, 
+                        Connexions, 
+                        Connexions_Raw, 
+                        Déconnexions, 
+                        Déconnexions_raw, 
                         temp_mort, 
                         temp_mort_raw, 
                         Couverture, 
@@ -41,16 +37,15 @@ def import_myreport_espace_disque_full():
                     ) VALUES (
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s, 
-                        %s, %s, %s, %s, 
                         %s, %s, %s, %s
                     )
                 """, tuple(row.values()))
-        log("extract myreport_espace_disque_full [ok]")
+        log("+-- extract myreport_sql_general [ok]")
         conn.commit()
         cur.close()
 
-        log("transform myreport_espace_disque_full ...")
-        log("load myreport_espace_disque_full ...")
+        log("+-- transform myreport_sql_general ...")
+        log("+-- load myreport_sql_general ...")
 
         conn.close()
         log("PostgreSQL - close")

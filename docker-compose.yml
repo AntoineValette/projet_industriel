@@ -35,7 +35,7 @@ services:
     container_name: dor_scripts
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: pythonApp.Dockerfile
     env_file:
       - .env
     depends_on:

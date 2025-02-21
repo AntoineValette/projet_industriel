@@ -3,18 +3,17 @@ import os
 import psycopg2
 import pandas as pd
 
-from core.coreLog import log
+from core.log import log
 from core.settings import Settings
 
-def import_myreport_swap_full():
+def myreport_swap():
     filename = "/data/logServer/myreport_swap_full.csv"
     if os.path.isfile(filename):
-
         log("PostgreSQL - open")
         conn = psycopg2.connect(Settings.POSTGRES_URL)
         cur = conn.cursor()
 
-        log("extract myreport_swap_full")
+        log("+-- extract myreport_swap")
         with open(filename, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             next(reader)
@@ -34,17 +33,16 @@ def import_myreport_swap_full():
                     ) VALUES (
                         %s, %s, %s, %s, 
                         %s, %s, %s, %s
-                    )
-                """, tuple(row.values()))
-        log("extract myreport_swap_full [ok]")
+                    )""", tuple(row.values()))
+        log("+-- extract myreport_swap [ok]")
         conn.commit()
         cur.close()
 
         # transform
-        #log("transform myreport_swap_full ...")
-        #tab = pd.read_sql("SELECT * FROM myreport_swap", conn)
-        #
-        #tab['Date et heure'] = tab["Date et heure"].str.split(" - ").str[0]
+        log("+-- transform myreport_swap ...")
+        tab = pd.read_sql("SELECT * FROM myreport_swap", conn)
+
+        tab['Date et heure'] = tab["Date et heure"].str.split(" - ").str[0]
         #tab = tab.iloc[:-5]
         ## Si vous avez un format comme "JJ/MM/AAAA HH:MM:SS", vous pouvez préciser :
         #tab['Date et heure'] = pd.to_datetime(tab['Date et heure'], format="%d/%m/%Y %H:%M:%S")
@@ -66,7 +64,7 @@ def import_myreport_swap_full():
         #
         #
         ## load
-        #log("load myreport_swap_full ...")
+        log("+-- load myreport_swap ...")
         #tab.to_sql("myreport_swap_filtered", conn, if_exists='append', index=False)
 
         conn.close()

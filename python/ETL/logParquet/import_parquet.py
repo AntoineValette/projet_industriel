@@ -5,7 +5,7 @@ import psycopg2
 from fastparquet import ParquetFile
 
 from core.settings import Settings
-from core.coreLog import log
+from core.log import log
 
 def import_parquet():
     log("Début du script")
