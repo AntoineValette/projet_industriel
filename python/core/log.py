@@ -1,8 +1,8 @@
 from datetime import datetime
 
-def log(message):
-    """Simple fonction de logging."""
-    print(f"[{datetime.now()}] {message}")
+def log(message, *args, **kwargs):
+    formatted_message = " ".join(map(str, args))
+    print(f"[{datetime.now()}] {message} {formatted_message}")
 
 def value(n):
     return ", ".join(["%s"] * n)
