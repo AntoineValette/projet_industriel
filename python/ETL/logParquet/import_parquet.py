@@ -18,7 +18,7 @@ def import_parquet():
     file_path = "/data/logParquet/DetailedDashboardLogs_sub_2411222036.parquet"  # Chemin du fichier Parquet
     pf = ParquetFile(file_path)
     pf_count = pf.count()
-    print(pf_count)
+    log(pf_count)
 
     log(f"Fichier Parquet chargé : {file_path}")
     log(f"Nombre total de lignes dans le fichier : {pf.count()}")
@@ -70,7 +70,7 @@ def import_parquet():
     file_path = "/data/logParquet/DetailedDistributionLogs_sub_2411222036.parquet"  # Chemin du fichier Parquet
     pf = ParquetFile(file_path)
     pf_count = pf.count()
-    print(pf_count)
+    log(pf_count)
 
     log(f"Fichier Parquet chargé : {file_path}")
     log(f"Nombre total de lignes dans le fichier : {pf.count()}")
@@ -123,7 +123,7 @@ def import_parquet():
     file_path = "/data/logParquet/DetailedFieldLogs_sub_2412021040.parquet"  # Chemin du fichier Parquet
     pf = ParquetFile(file_path)
     pf_count = pf.count()
-    print(pf_count)
+    log(pf_count)
 
     log(f"Fichier Parquet chargé : {file_path}")
     log(f"Nombre total de lignes dans le fichier : {pf_count}")

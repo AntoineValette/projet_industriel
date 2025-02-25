@@ -40,32 +40,7 @@ def myreport_swap():
 
         # transform
         log("+-- transform myreport_swap ...")
-        tab = pd.read_sql("SELECT * FROM myreport_swap", conn)
-
-        tab['Date et heure'] = tab["Date et heure"].str.split(" - ").str[0]
-        #tab = tab.iloc[:-5]
-        ## Si vous avez un format comme "JJ/MM/AAAA HH:MM:SS", vous pouvez préciser :
-        #tab['Date et heure'] = pd.to_datetime(tab['Date et heure'], format="%d/%m/%Y %H:%M:%S")
-        #start_date = '2024-08-24 23:32:03'
-        #end_date = '2024-10-15 23:31:49'
-        #tab = tab[(tab['Date et heure'] >= start_date) & (tab['Date et heure'] <= end_date)]
-        ## suppression des colonnes inutiles
-        #tab = tab.drop(columns=["Date et heure(RAW)"])
-        #tab = tab.drop(columns=["Total"])
-        #tab = tab.drop(columns=["Temps mort"])
-        #tab = tab.drop(columns=["Couverture"])
-        ## renommage des colonnes
-        #tab.rename(columns={"Temps mort(RAW)": "swap Temps mort(%)"}, inplace=True)
-        #tab.rename(columns={"Couverture(RAW)": "swap Couverture(%)"}, inplace=True)
-        #tab.rename(columns={"Total(RAW)": "total swap(%)"}, inplace=True)
-        #
-        #tab = tab.drop(columns=["swap Temps mort(%)"])
-        #tab = tab.drop(columns=["swap Couverture(%)"])
-        #
-        #
-        ## load
         log("+-- load myreport_swap ...")
-        #tab.to_sql("myreport_swap_filtered", conn, if_exists='append', index=False)
 
         conn.close()
         log("PostgreSQL - close")
