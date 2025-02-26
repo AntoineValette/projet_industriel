@@ -45,6 +45,8 @@ def mergeDF():
         error_columns = [col for col in df_error_grouped2.columns if "Error" in col]
         df_error_grouped2["Total_Errors"] = df_error_grouped2[error_columns].sum(axis=1)
 
+
+
         log("dataset_LogETL_LogServer [ok]")
         conn.commit()
 
