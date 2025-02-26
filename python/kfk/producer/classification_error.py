@@ -1,3 +1,5 @@
+
+
 def categorize_message(message):
     message = message.lower()
     if "Guidez Atelier".lower() in message or "Guidez Social".lower()  in message:

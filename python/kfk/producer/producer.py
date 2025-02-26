@@ -1,11 +1,10 @@
 import asyncio
-from kafka import KafkaProducer
 import json
 import csv
 import sys
 from datetime import datetime
-from classification_error import categorize_message
-
+from kfk.producer.classification_error import categorize_message
+from kafka import KafkaProducer
 
 def log(msg):
     print(f"[{datetime.now()}] {msg}", flush=True)
@@ -68,7 +67,6 @@ async def stream_file(filepath, topic):
 
         await asyncio.sleep(1)  # Pause async pour éviter de bloquer la boucle
 
-
 async def main():
     # Liste des fichiers à surveiller et leurs topics Kafka associés
     files_to_watch = [
@@ -79,7 +77,3 @@ async def main():
     # Lancer chaque tâche de surveillance en parallèle
     tasks = [stream_file(filepath, topic) for filepath, topic in files_to_watch]
     await asyncio.gather(*tasks)  # Exécuter toutes les tâches en parallèle
-
-
-# Démarrer le programme
-asyncio.run(main())

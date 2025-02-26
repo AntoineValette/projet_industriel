@@ -30,8 +30,8 @@ Déplacer les fichiers logs dans le répertoire ./data du repertoire cloné
 conda create -n smartETL-dev
 conda activate smartETL-dev
 conda install python=3.12.8
-conda install sqlalchemy pandas psycopg2 
-conda install jupyterlab matplotlib seaborn scikit-learn numpy
+conda install sqlalchemy pandas psycopg2 fastparquet
+conda install jupyterlab matplotlib seaborn scikit-learn numpy  plotly lxml  
 ```
 Regénérer le fichier requirements-dev.txt
 ```
@@ -64,7 +64,7 @@ cd smartETL
 conda create -n smartETL
 conda activate smartETL
 conda install python=3.12.8
-conda install sqlalchemy pandas psycopg2 
+conda install sqlalchemy pandas psycopg2  fastparquet
 
 pip list --format=freeze > requirements.txt 
 ```

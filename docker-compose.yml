@@ -63,6 +63,26 @@ services:
     container_name: my_zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  kafka-manager:
+    image: hlebalbau/kafka-manager:3.0.0.5
+    container_name: kafka-manager
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+      APPLICATION_SECRET: "randomsecret"
+    depends_on:
+      - zookeeper
+      - kafka
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   # Kafka Broker
   kafka:
@@ -73,37 +93,53 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_MESSAGE_MAX_BYTES: 209715200  # Augmente la taille maximale des messages à 200 MB
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200  # Augmente la taille maximale des données récupérées par les réplicas
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200  # Augmente la taille maximale des messages récupérés par les consommateurs
     ports:
       - "9092:9092"
     depends_on:
       - zookeeper
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   # Python Producer
   producer:
     build:
-      context: ./python_script
+      dockerfile: kafka.Dockerfile
+      context: .
     container_name: my_python_producer
     depends_on:
       - kafka
       - postgres
+    env_file:
+      - .env
     volumes:
-      - ./python_script:/app
-      - ./kafka:/app/kafka
-      - ../../data:/data
-    entrypoint: ["/bin/bash", "/app/kafka/producer/producer_entrypoint.sh"]
+      - ./data:/data
+    entrypoint: ["python", "producer.py"]
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   # Python Consumer (for consuming Kafka messages and inserting into PostgreSQL)
   consumer:
     build:
-      context: ./python_script
+      dockerfile: kafka.Dockerfile
+      context: .
     container_name: my_python_consumer
     depends_on:
       - kafka
       - postgres
-    volumes:
-      - ./python_script:/app
-      - ./kafka:/app/kafka
-    entrypoint: ["/bin/bash", "/app/kafka/consumer/consumer_entrypoint.sh"]
+    entrypoint: ["python", "consumer.py"]
+    env_file:
+      - .env
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   grafana:
     image: grafana/grafana:11.5.1
@@ -127,7 +163,6 @@ services:
 volumes:
   postgres-data:
   grafana-data:
-
 
 networks:
   dor_network:

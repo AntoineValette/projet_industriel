@@ -1,7 +1,7 @@
 import socket
 import time
 
-def wait_for_service(host, port, timeout=60):
+def wait_for_service(host="kafka", port=9092, timeout=60):
     start_time = time.time()
     while time.time() - start_time < timeout:
         try:
@@ -12,6 +12,3 @@ def wait_for_service(host, port, timeout=60):
             print(f"Attente de Kafka sur {host}:{port}...")
             time.sleep(5)
     raise Exception(f"Kafka n'est pas accessible après {timeout} secondes")
-
-if __name__ == "__main__":
-    wait_for_service("kafka", 9092)
