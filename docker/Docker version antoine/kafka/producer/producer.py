@@ -1,12 +1,16 @@
-import time
+import asyncio
 from kafka import KafkaProducer
 import json
 import csv
-import threading
+import sys
+from datetime import datetime
+from classification_error import categorize_message
 
-def log(message):
-    """Affiche un message horodaté"""
-    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
+
+def log(msg):
+    print(f"[{datetime.now()}] {msg}", flush=True)
+    sys.stdout.flush()
+
 
 # Configuration de KafkaProducer
 producer = KafkaProducer(
@@ -14,46 +18,68 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-def stream_file(filepath, topic):
-    """Lit un fichier en continu avec csv.DictReader et l'envoie à Kafka"""
-    with open(filepath, 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f, delimiter=';')
-        
-        # Lire tout le fichier au démarrage
-        log(f"Lecture complète de {filepath} depuis le début...")
-        for row in reader:
+
+async def stream_file(filepath, topic):
+    """Lit un fichier en continu et l'envoie à Kafka en mode tail -f"""
+    last_line_number = 0  # Compteur pour suivre la dernière ligne lue
+
+    # Lecture initiale du fichier
+    f = await asyncio.to_thread(open, filepath, 'r', encoding='utf-8-sig')
+    reader = list(csv.DictReader(f, delimiter=';'))  # Lire tout le fichier dans une liste
+    f.close()  # Fermer après lecture initiale
+
+    log(f"Lecture complète de {filepath} depuis le début...")
+
+    # Envoyer toutes les lignes existantes au démarrage
+    for i, row in enumerate(reader):
+        if topic == "logERR_topic":
+            print('yes')
+            row['type_error'] = categorize_message(row['Message'])
+            print(row['type_error'])
             producer.send(topic, row)
-            log(f"[{filepath}] Ligne envoyée : {row}")
+        else:
+            producer.send(topic, row)
+        log(f"[{filepath}] Ligne envoyée : {row}")
+        last_line_number = i + 1  # Mémoriser la dernière ligne lue
 
-        # Suivre les nouvelles lignes (mode tail -f)
-        log(f"Fin de la lecture initiale de {filepath}. Passage en mode suivi (tail -f)...")
-        while True:
-            line = f.readline()
-            if line:
-                try:
-                    # Parser la nouvelle ligne avec un nouveau DictReader
-                    new_line_reader = csv.DictReader([line], delimiter=';')
-                    for row in new_line_reader:
-                        producer.send(topic, row)
-                        log(f"[{filepath}] Nouvelle ligne envoyée : {row}")
-                except Exception as e:
-                    log(f"Erreur de parsing de la ligne : {line} - {e}")
-            else:
-                time.sleep(1)
+    log(f"Fin de la lecture initiale de {filepath}. Passage en mode suivi (tail -f)...")
 
-# Liste des fichiers à suivre et des topics associés
-files_to_watch = [
-    ("/data/logETL/241016_LogETL.csv", "logOK_topic"),
-    ("/data/logETL/241016_LogETLError.csv", "logERR_topic")
-]
+    # Passer en mode suivi des nouvelles lignes
+    while True:
+        f = await asyncio.to_thread(open, filepath, 'r', encoding='utf-8-sig')
+        reader = list(csv.DictReader(f, delimiter=';'))  # Lire tout le fichier
+        f.close()  # Fermer après lecture
 
-# Lancer un thread par fichier
-threads = []
-for filepath, topic in files_to_watch:
-    t = threading.Thread(target=stream_file, args=(filepath, topic))
-    t.start()
-    threads.append(t)
+        # Vérifier si de nouvelles lignes ont été ajoutées
+        if len(reader) > last_line_number:
+            new_rows = reader[last_line_number:]  # Récupérer les nouvelles lignes
 
-# Attendre que tous les threads se terminent (ce qui n'arrivera jamais si les fichiers sont toujours alimentés)
-for t in threads:
-    t.join()
+            for row in new_rows:
+                if topic == "logERR_topic":
+                    print('yes')
+                    row['type_error'] = categorize_message(row['Message'])
+                    print(row['type_error'])
+                    producer.send(topic, row)
+                else:
+                    producer.send(topic, row)
+                log(f"[{filepath}] Nouvelle ligne envoyée : {row}")
+
+            last_line_number = len(reader)  # Mettre à jour le dernier numéro de ligne
+
+        await asyncio.sleep(1)  # Pause async pour éviter de bloquer la boucle
+
+
+async def main():
+    # Liste des fichiers à surveiller et leurs topics Kafka associés
+    files_to_watch = [
+        ("/data/logETL/241016_LogETL.csv", "logOK_topic"),
+        ("/data/logETL/241016_LogETLError.csv", "logERR_topic")
+    ]
+
+    # Lancer chaque tâche de surveillance en parallèle
+    tasks = [stream_file(filepath, topic) for filepath, topic in files_to_watch]
+    await asyncio.gather(*tasks)  # Exécuter toutes les tâches en parallèle
+
+
+# Démarrer le programme
+asyncio.run(main())

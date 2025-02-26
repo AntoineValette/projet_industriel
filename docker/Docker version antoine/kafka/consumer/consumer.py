@@ -2,9 +2,11 @@ from kafka import KafkaConsumer
 import psycopg2
 import json
 from datetime import datetime
+import sys
 
 def log(msg):
-    print(f"[{datetime.now()}] {msg}")
+    print(f"[{datetime.now()}] {msg}", flush=True)
+    sys.stdout.flush()  # Force l'affichage immédiat
 
 conn = psycopg2.connect(
     host="postgres",
@@ -31,10 +33,10 @@ for message in consumer:
         """, tuple(data.values()))
         log("Inséré dans logOK")
 
-    elif message.topic == 'logERR_topic':
+    if message.topic == 'logERR_topic':
         cur.execute("""
-            INSERT INTO logERR (server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO logERR (server_version, client_version, product, project_name, model, log_date, log_time, row_num, log_type, log_message, etl_start_datetime, launcher_id, launcher_name, machine, program_id, program_name, schedules_id, schedules_name, schedules_start_datetime, type_error) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, tuple(data.values()))
         log("Inséré dans logERR")
 
