@@ -12,7 +12,7 @@ def extract_data(file_path):
     return data
 
 # Étape 2 : Transformation des données
-def transform_data(data):
+def transform_data(data,delete_columns, rename_columns):
     data.columns = (data.columns.str.strip().str.lower().str.replace(' ', '_'))
     data.columns = (data.columns.str.replace(':', ''))
     data.columns = (data.columns.str.replace('(raw)', '_raw'))
@@ -36,5 +36,5 @@ db_connection_string = settings.POSTGRES_URL
 
 if os.path.exists(file_path):
     data = extract_data(file_path)
-    transformed_data = transform_data(data)
+    transformed_data = transform_data(data, delete_columns, rename_columns)
     load_data(transformed_data, db_connection_string, table_name)
