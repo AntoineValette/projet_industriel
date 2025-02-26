@@ -491,3 +491,8 @@ CREATE TABLE IF NOT EXISTS dataset_old
     Temps_mort_cpu_pct NUMERIC,
     Couverture_cpu_pct NUMERIC
 );
+
+-- postgres est une base par défaut définie dans .env)
+--création d'une base pour airflow
+CREATE DATABASE airflow;
+GRANT ALL PRIVILEGES ON DATABASE airflow TO admin;
