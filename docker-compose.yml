@@ -17,6 +17,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   pgadmin:
     image: dpage/pgadmin4:8.14.0
@@ -30,6 +34,10 @@ services:
           condition: service_healthy
     volumes:
       - ./conf/postgresql/servers.json:/pgadmin4/servers.json
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   python_app:
     container_name: dor_scripts
@@ -42,8 +50,11 @@ services:
       postgres:
           condition: service_healthy
     volumes:
-      - ./python/init:/script
       - ./data:/data
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
   grafana:
     image: grafana/grafana:11.5.1
@@ -59,8 +70,34 @@ services:
     depends_on:
       postgres:
           condition: service_healthy
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
+  mageai:
+    container_name: dor_mageai
+    build:
+      context: .
+      dockerfile: mageai.Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./conf/mageia/:/home/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "6789:6789"
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
 
 volumes:
   postgres-data:
   grafana-data:
+
+
+networks:
+  dor_network:

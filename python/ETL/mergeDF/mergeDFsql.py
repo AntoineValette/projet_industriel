@@ -1,9 +1,12 @@
+
+import os
+
 import pandas as pd
 from sqlalchemy import create_engine
 
 from core.log import log
 from core.settings import settings
-import os
+
 
 # Étape 1 : Extraction des données
 def extract_data(file_path):
@@ -25,16 +28,17 @@ def load_data(data, db_connection_string, table_name):
     engine = create_engine(db_connection_string)
     data.to_sql(table_name, engine, if_exists='append', index=False, chunksize=1000)
 
+def mergeDFsql():
+    name = "myreport_espace_disque"
+    rename_columns = []
+    delete_columns = []
 
-name = "myreport_espace_disque"
-rename_columns = []
-delete_columns = []
+    table_name = f"{name}_raw"
+    file_path = f'../../../data/logServer/{name}_full.csv'
+    db_connection_string = settings.POSTGRES_URL
 
-table_name = f"{name}_raw"
-file_path = f'../../../data/logServer/{name}_full.csv'
-db_connection_string = settings.POSTGRES_URL
+    if os.path.exists(file_path):
+        data = extract_data(file_path)
+        transformed_data = transform_data(data)
+        load_data(transformed_data, db_connection_string, table_name)
 
-if os.path.exists(file_path):
-    data = extract_data(file_path)
-    transformed_data = transform_data(data)
-    load_data(transformed_data, db_connection_string, table_name)
