@@ -390,7 +390,7 @@ CREATE TABLE IF NOT EXISTS FieldLogs
 );
 
 -- création de la table dataset
-CREATE TABLE IF NOT EXISTS dataset
+CREATE TABLE IF NOT EXISTS dataset_old
 (
 	ident BIGSERIAL, -- champs autoincrement
     time TIMESTAMP,

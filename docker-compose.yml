@@ -75,20 +75,27 @@ services:
         aliases:
           - dor_network
 
-  mageai:
-    container_name: dor_mageai
+  airflow:
     build:
       context: .
-      dockerfile: mageai.Dockerfile
+      dockerfile: dockerfile_airflow/dockerfile
+    container_name: dor_airflow
     env_file:
       - .env
-    volumes:
-      - ./conf/mageia/:/home/src
     depends_on:
       postgres:
         condition: service_healthy
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+        - ./airflow/dags:/opt/airflow/dags
+        - logs_data:/opt/airflow/logs
+        - ./airflow/plugins:/opt/airflow/plugins
     ports:
-      - "6789:6789"
+      - "8080:8080"
     networks:
       dor_network:
         aliases:
@@ -97,6 +104,7 @@ services:
 volumes:
   postgres-data:
   grafana-data:
+  logs_data:
 
 
 networks:
