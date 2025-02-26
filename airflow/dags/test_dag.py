@@ -15,8 +15,9 @@ dag = DAG(
     'test_dag',
     default_args=default_args,
     description='Test DAG qui imprime un message toutes les 60 secondes',
-    schedule_interval=timedelta(seconds=60),
-    catchup=False
+    schedule=timedelta(seconds=60),
+    catchup=False,
+    is_paused_upon_creation=True  # Le DAG sera inactif dès sa création
 )
 
 task_print = PythonOperator(
