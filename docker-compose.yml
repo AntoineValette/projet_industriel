@@ -51,10 +51,59 @@ services:
           condition: service_healthy
     volumes:
       - ./data:/data
+    entrypoint: ["python", "smartETL.py"]
     networks:
       dor_network:
         aliases:
           - dor_network
+
+  # Kafka Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: my_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  # Kafka Broker
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: my_kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+
+  # Python Producer
+  producer:
+    build:
+      context: ./python_script
+    container_name: my_python_producer
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - ./python_script:/app
+      - ./kafka:/app/kafka
+      - ../../data:/data
+    entrypoint: ["/bin/bash", "/app/kafka/producer/producer_entrypoint.sh"]
+
+  # Python Consumer (for consuming Kafka messages and inserting into PostgreSQL)
+  consumer:
+    build:
+      context: ./python_script
+    container_name: my_python_consumer
+    depends_on:
+      - kafka
+      - postgres
+    volumes:
+      - ./python_script:/app
+      - ./kafka:/app/kafka
+    entrypoint: ["/bin/bash", "/app/kafka/consumer/consumer_entrypoint.sh"]
 
   grafana:
     image: grafana/grafana:11.5.1
@@ -70,25 +119,6 @@ services:
     depends_on:
       postgres:
           condition: service_healthy
-    networks:
-      dor_network:
-        aliases:
-          - dor_network
-
-  mageai:
-    container_name: dor_mageai
-    build:
-      context: .
-      dockerfile: mageai.Dockerfile
-    env_file:
-      - .env
-    volumes:
-      - ./conf/mageia/:/home/src
-    depends_on:
-      postgres:
-        condition: service_healthy
-    ports:
-      - "6789:6789"
     networks:
       dor_network:
         aliases:

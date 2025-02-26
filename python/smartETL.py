@@ -10,14 +10,14 @@ if __name__ == "__main__":
     wait_for_postgres()
 
     # import des logETl ok et error
-    logETL()
-    logEtlError()
+    #logETL()
+    #logEtlError()
 
     # import des logServer
     logServer()
 
     # import du mergeDF
-    mergeDF()
+    #mergeDF()
 
     # import des logParquets
     import_parquet()

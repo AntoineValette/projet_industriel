@@ -28,5 +28,6 @@ CREATE TABLE "logERR" (
     program_name VARCHAR(255),
     schedules_id VARCHAR(255),
     schedules_name VARCHAR(255),
-    schedules_start_datetime TIMESTAMP
+    schedules_start_datetime TIMESTAMP,
+    type_error TEXT
 );

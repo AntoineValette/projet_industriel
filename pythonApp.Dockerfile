@@ -24,6 +24,3 @@ WORKDIR /code
 
 # Copie le script Python
 COPY ./python/ ./
-
-# Définit le point d'entrée
-ENTRYPOINT ["python3", "smartETL.py"]
