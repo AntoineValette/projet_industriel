@@ -55,6 +55,9 @@ docker compose down
 
 # supprime le docker compose avec les volumes 
 docker compose down -v 
+
+# monter le docker en le buildant 
+docker compose up -b 
 ```
 
 NB: pour générer le fichier conda pour la prod : 
