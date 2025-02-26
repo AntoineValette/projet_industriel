@@ -1,0 +1,103 @@
+name: smartETL
+
+services:
+  postgres:
+    image: postgres:17.2
+    container_name: dor_postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  pgadmin:
+    image: dpage/pgadmin4:8.14.0
+    container_name: dor_pgadmin
+    env_file:
+      - .env
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+          condition: service_healthy
+    volumes:
+      - ./conf/postgresql/servers.json:/pgadmin4/servers.json
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  python_app:
+    container_name: dor_scripts
+    build:
+      context: .
+      dockerfile: pythonApp.Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+          condition: service_healthy
+    volumes:
+      - ./data:/data
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  grafana:
+    image: grafana/grafana:11.5.1
+    container_name: dor_grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./conf/grafana/provisioning:/etc/grafana/provisioning
+      - ./conf/grafana/dashboards:/import
+    depends_on:
+      postgres:
+          condition: service_healthy
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  mageai:
+    container_name: dor_mageai
+    build:
+      context: .
+      dockerfile: mageai.Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./conf/mageia/:/home/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "6789:6789"
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+volumes:
+  postgres-data:
+  grafana-data:
+
+
+networks:
+  dor_network:

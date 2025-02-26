@@ -1,0 +1,74 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: alert_group
+    folder: alert_folder
+    interval: 1m
+    rules:
+      - uid: bedkl7eb3629sf
+        title: "Log dans logerr détecté"
+        condition: B
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: dedjfow6t58n4e
+            model:
+              editorMode: code
+              format: table
+              intervalMs: 60000
+              maxDataPoints: 43200
+              rawQuery: true
+              rawSql: |-
+                SELECT
+                  count(*) AS anomalies
+                FROM
+                  logerr
+                WHERE
+                  etl_start_datetime BETWEEN $__timeFrom() AND $__timeTo()
+              refId: A
+              sql:
+                columns:
+                  - parameters: []
+                    type: function
+                groupBy:
+                  - property:
+                      type: string
+                    type: groupBy
+                limit: 50
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: ""
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+              type: classic_conditions
+        noDataState: OK
+        execErrState: OK
+        annotations:
+          description: "une description détaillée ici"
+          summary: "Au moins une erreur dans logerr sur les 10 dernières secondes."
+        labels: {}
+        isPaused: false
+        notification_settings:
+          receiver: Teams
