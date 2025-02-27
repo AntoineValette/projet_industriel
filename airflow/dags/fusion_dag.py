@@ -46,6 +46,7 @@ def fusion_horaire():
     """chargelent des données depuis Postgres"""
     df_logOk = get_df(since, "logOK")
     df_logErr = get_df(since, "logERR")
+
     df_ping = get_ping_filtered(get_df(since, "myreport_ping"))
     df_cpu = get_cpu_filtered(get_df(since, "myreport_cpu"))
     df_ram = get_ram_filtered(get_df(since, "myreport_ram"))
@@ -64,7 +65,6 @@ def fusion_horaire():
     print("-----------df_ram-----------")
     #print(df_ram.head())
     #print(df_ram.iloc[0])
-
 
     """préparation de df_logERR"""
     # Conversion de la colonne ETL_StartDateTime en Datetime pandas
@@ -160,7 +160,7 @@ def fusion_horaire():
 
     """enregistrement"""
     with get_db_connection() as conn:
-        df_global.to_sql("dataset2", if_exists='append', index=False, con=conn)
+        df_global.to_sql("dataset", if_exists='append', index=False, con=conn)
 
 
 # Définition du PythonOperator pour exécuter le job ETL

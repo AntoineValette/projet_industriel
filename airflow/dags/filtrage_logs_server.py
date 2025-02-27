@@ -1,28 +1,21 @@
 import pandas as pd
 
-"""
-    df_ping = get_df(since, "myreport_ping")
-    df_cpu = get_df(since, "myreport_cpu")
-    df_ram = get_df(since, "myreport_ram")
-    df_reseau = get_df(since, "myreport_reseau")
-    df_sql_management_storage = get_df(since, "myreport_memoire")
-    df_sql_lock = get_df(since, "myreport_sql_lock")
-    df_swap = get_df(since, "myreport_swap")
-    df_sql_statistic = get_df(since, "myreport_sql_statistic")
-    df_storage = get_df(since, "myreport_espace_disque")
-    df_sql_general = get_df(since, "myreport_sql_general")
-"""
+def format_datetime(tab:pd.DataFrame):
+    """
+    transformation de la colonne "date_heure" du dataframe en pd.datetime
+    application d'un filtre sur les dates ==>> à supprimer pour la prod
+    """
+    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
+    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
 
-start_date = '2024-08-24 23:32:03'
-end_date = '2024-10-15 23:31:49'
+    start_date = '2024-08-24 23:32:03'
+    end_date = '2024-10-15 23:31:49'
+    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    return tab
 
 
 def get_cpu_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    #tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -58,11 +51,7 @@ def get_cpu_filtered(tab: pd.DataFrame):
     return tab
 
 def get_storage_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    #tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab=tab.drop(columns=["ident"])
@@ -94,11 +83,7 @@ def get_storage_filtered(tab: pd.DataFrame):
     return tab
 
 def get_ping_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -127,11 +112,7 @@ def get_ping_filtered(tab: pd.DataFrame):
     return tab
 
 def get_ram_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -153,11 +134,7 @@ def get_ram_filtered(tab: pd.DataFrame):
     return tab
 
 def get_reseau_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -261,11 +238,7 @@ def get_reseau_filtered(tab: pd.DataFrame):
     return tab
 
 def get_sql_general_filetered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -291,11 +264,7 @@ def get_sql_general_filetered(tab: pd.DataFrame):
     return tab
 
 def get_memoire_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -329,12 +298,7 @@ def get_memoire_filtered(tab: pd.DataFrame):
     return tab
 
 def get_sql_lock_filtered(tab: pd.DataFrame):
-
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    #tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab = format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -362,11 +326,7 @@ def get_sql_lock_filtered(tab: pd.DataFrame):
     return tab
 
 def get_sql_statistic_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
@@ -393,11 +353,7 @@ def get_sql_statistic_filtered(tab: pd.DataFrame):
     return tab
 
 def get_swap_filtered(tab: pd.DataFrame):
-    tab["date_heure"] = tab["date_heure"].str.split(" - ").str[0]
-    # tab = tab.iloc[:-5]
-    tab['date_heure'] = pd.to_datetime(tab['date_heure'], format="%d/%m/%Y %H:%M:%S")
-
-    tab = tab[(tab['date_heure'] >= start_date) & (tab['date_heure'] <= end_date)]
+    tab=format_datetime(tab)
 
     # suppression des colonnes inutiles
     tab = tab.drop(columns=["ident"])
