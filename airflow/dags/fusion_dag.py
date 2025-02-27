@@ -58,13 +58,7 @@ def fusion_horaire():
     df_storage = get_storage_filtered(get_df(since, "myreport_espace_disque"))
     df_sql_general = get_sql_general_filetered(get_df(since, "myreport_sql_general"))
 
-    print("-----------df_cpu-----------")
-    #print(df_cpu.head())
-    #print(df_cpu.iloc[0])
-
-    print("-----------df_ram-----------")
-    #print(df_ram.head())
-    #print(df_ram.iloc[0])
+    print("-----------importation des dataframes terminée-----------")
 
     """préparation de df_logERR"""
     # Conversion de la colonne ETL_StartDateTime en Datetime pandas
@@ -76,11 +70,7 @@ def fusion_horaire():
         Message_Category=df_logErr["log_message"].apply(categorize_message)
     )
 
-    #print("-----------df_error-----------")
-    #print(df_error.head())
-    print("-----------type de df_logErr[Date et heure]-----------")
-    print(df_logErr["Date et heure"].dtype)
-
+    print("-----------préparation de logERR terminée-----------")
 
     """Utiliser des crosstab (ou pivot) et joindre les DataFrames"""
     # Comptage des catégories par Date et heure
@@ -92,9 +82,7 @@ def fusion_horaire():
     # Remettre "Date et heure" en colonne si besoin
     df_error_grouped2 = df_error_grouped2.reset_index()
 
-
-    #print("-----------df_error_grouped2-----------")
-    #print(df_error_grouped2.head())
+    print("-----------transformation/enrichissement de logERR terminée-----------")
 
     # sommer le nb d'erreurs dans les colonnes erreur pour la vérification
     error_columns = [col for col in df_error_grouped2.columns if "Error" in col]
@@ -109,9 +97,6 @@ def fusion_horaire():
     end_date = df_logErr['etl_start_datetime'].max()
     df_reduced = df_logOk[(df_logOk['etl_startdatetime'] >= start_date) & (df_logOk['etl_startdatetime'] <= end_date)]
 
-    #print("-----------df_reduced-----------")
-    #print(df_reduced.head())
-
     """suite de la préparation de df_logOK"""
     # Ajout d'une colonne Date et heure ne tenant pas compte des minutes
     df_reduced.loc[:, "Date et heure"] = df_reduced["etl_startdatetime"].dt.floor("h")
@@ -122,11 +107,7 @@ def fusion_horaire():
         rows_deleted=("rows_deleted", "sum")  # Somme des suppressions
     ).reset_index()
 
-    print("-----------type de df_grouped[Date et heure]-----------")
-    print(df_grouped["Date et heure"].dtype)
-
-    print("-----------type de df_error_grouped2[Date et heure]-----------")
-    print(df_error_grouped2["Date et heure"].dtype)
+    print("-----------préparation de logOK terminée-----------")
 
     """fusion des log ok et log erreur"""
     df_final = df_error_grouped2.merge(
@@ -137,14 +118,16 @@ def fusion_horaire():
     # Changement des valeurs NaN en 0
     df_final = df_final.fillna(0)
 
+    print("-----------fusion de logERR et logOK terminée-----------")
+
     """Fusion des DF de stat server"""
     dfs = [df_reseau, df_sql_statistic, df_sql_lock, df_sql_general, df_ping, df_storage, df_swap,
            df_sql_management_storage, df_ram, df_cpu]
     df_server_stats = reduce(lambda left, right: pd.merge(left, right, on="date_heure", how="outer"), dfs)
 
-    #besoin d'avoir les tables filtrées
-
     df_server_stats['Date et heure'] = pd.to_datetime(df_server_stats['date_heure'])
+
+    print("-----------fusion des dataframes des logs servers terminée-----------")
 
     # Fusion des deux df conso
     df_global = df_final.merge(
@@ -154,9 +137,7 @@ def fusion_horaire():
     )
     df_global = df_global.fillna(0)
 
-    print("-----------df_global-----------")
-    print(df_global.head())
-    print(list(df_global.columns))
+    print("-----------fusion de globale terminée-----------")
 
     """enregistrement"""
     with get_db_connection() as conn:
