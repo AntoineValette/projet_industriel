@@ -93,9 +93,12 @@ def fusion_horaire():
     df_logOk['etl_startdatetime'] = pd.to_datetime(df_logOk['etl_startdatetime'], format="%d/%m/%Y %H:%M")
 
     """Réduction du df pour qu'il soit dans la bonne période ==>> SUPPRIMER CA POUR MISE EN PROD"""
+    """
     start_date = df_logErr['etl_start_datetime'].min()
     end_date = df_logErr['etl_start_datetime'].max()
     df_reduced = df_logOk[(df_logOk['etl_startdatetime'] >= start_date) & (df_logOk['etl_startdatetime'] <= end_date)]
+    """
+    df_reduced = df_logOk
 
     """suite de la préparation de df_logOK"""
     # Ajout d'une colonne Date et heure ne tenant pas compte des minutes
@@ -140,6 +143,7 @@ def fusion_horaire():
     print("-----------fusion de globale terminée-----------")
 
     """enregistrement"""
+    df_global['date_heure'] = pd.to_datetime(df_global['date_heure']) #en sécurité
     with get_db_connection() as conn:
         df_global.to_sql("dataset", if_exists='append', index=False, con=conn)
 

@@ -8,9 +8,11 @@ def format_datetime(tab:pd.DataFrame, colonne_datetime: str):
     tab[colonne_datetime] = tab[colonne_datetime].str.split(" - ").str[0]
     tab[colonne_datetime] = pd.to_datetime(tab[colonne_datetime], format="%d/%m/%Y %H:%M:%S")
 
+    """
     start_date = '2024-08-24 23:32:03'
     end_date = '2024-10-15 23:31:49'
     tab = tab[(tab[colonne_datetime] >= start_date) & (tab[colonne_datetime] <= end_date)]
+    """
     return tab
 
 
