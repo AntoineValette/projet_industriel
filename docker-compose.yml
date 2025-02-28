@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     restart: always
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD", "pg_isready", "-U", "admin"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -93,9 +93,9 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_MESSAGE_MAX_BYTES: 209715200  # Augmente la taille maximale des messages à 200 MB
-      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200  # Augmente la taille maximale des données récupérées par les réplicas
-      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200  # Augmente la taille maximale des messages récupérés par les consommateurs
+      KAFKA_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200
     ports:
       - "9092:9092"
     depends_on:
@@ -104,6 +104,12 @@ services:
       dor_network:
         aliases:
           - dor_network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
   # Python Producer
   producer:
@@ -112,8 +118,10 @@ services:
       context: .
     container_name: my_python_producer
     depends_on:
-      - kafka
-      - postgres
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     env_file:
       - .env
     volumes:
@@ -123,6 +131,7 @@ services:
       dor_network:
         aliases:
           - dor_network
+
 
   # Python Consumer (for consuming Kafka messages and inserting into PostgreSQL)
   consumer:
