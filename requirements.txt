@@ -22,3 +22,4 @@ tenacity==9.0.0
 typing_extensions==4.12.2
 tzdata==2023.3
 wheel==0.45.1
+pyarrow==19.0.0
