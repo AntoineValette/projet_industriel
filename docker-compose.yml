@@ -169,9 +169,36 @@ services:
         aliases:
           - dor_network
 
+  airflow:
+    build:
+      context: .
+      dockerfile: dockerfile_airflow/dockerfile
+    container_name: dor_airflow
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/airflow
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+        - ./airflow/dags:/opt/airflow/dags
+        - logs_data:/opt/airflow/logs
+        - ./airflow/plugins:/opt/airflow/plugins
+    ports:
+      - "8080:8080"
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
 volumes:
   postgres-data:
   grafana-data:
+  logs_data:
 
 networks:
   dor_network:
