@@ -185,9 +185,9 @@ services:
       - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
     volumes:
-        - ./airflow/dags:/opt/airflow/dags
+        - ./python/dags:/opt/airflow/dags
         - logs_data:/opt/airflow/logs
-        - ./airflow/plugins:/opt/airflow/plugins
+        - ./conf/airflow/plugins:/opt/airflow/plugins
     ports:
       - "8080:8080"
     networks:
