@@ -114,6 +114,7 @@ def fusion_horaire():
         on="Date et heure",
         how="outer",
     )
+
     # Changement des valeurs NaN en 0
     df_final = df_final.fillna(0)
 
