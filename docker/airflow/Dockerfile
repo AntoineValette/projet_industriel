@@ -8,6 +8,10 @@ RUN apt-get update && \
 
 # Changer l'utilisateur pour installer le package via pip
 USER airflow
+
+# COPY ./docker/airflow/requirements.txt /code/requirements.txt
+# RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
 RUN pip install --upgrade psycopg2-binary
 
 # Revenir en root pour copier et rendre le script exécutable
