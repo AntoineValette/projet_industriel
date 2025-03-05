@@ -112,7 +112,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (heuredate_raw * INTERVAL '1 day')) AS time,\n    AVG(memconnexion_raw) / POWER(1024,3) AS connection_memory_GB\nFROM myreport_memoire\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memconnexion_raw) / POWER(1024,3) AS connection_memory_GB\nFROM myreport_memoire\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -228,7 +228,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (heuredate_raw * INTERVAL '1 day')) AS time,\n    memtotaleserveur_raw AS memory_usage_pct\nFROM myreport_memoire;",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    memtotaleserveur_raw AS memory_usage_pct\nFROM myreport_memoire;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -369,7 +369,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (heuredate_raw * INTERVAL '1 day')) AS time,\n    AVG(memserveurcible_raw) / POWER(1024,3) AS avg_used_memory_GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (heuredate_raw * INTERVAL '1 day')) \n      BETWEEN $__timeFrom() AND $__timeTo() \nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memserveurcible_raw) / POWER(1024,3) AS avg_used_memory_GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n      BETWEEN $__timeFrom() AND $__timeTo() \nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
