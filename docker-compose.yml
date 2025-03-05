@@ -43,7 +43,7 @@ services:
     container_name: dor_scripts
     build:
       context: .
-      dockerfile: pythonApp.Dockerfile
+      dockerfile: docker/python/Dockerfile
     env_file:
       - .env
     depends_on:
@@ -114,7 +114,7 @@ services:
   # Python Producer
   producer:
     build:
-      dockerfile: kafka.Dockerfile
+      dockerfile: docker/kafka/Dockerfile
       context: .
     container_name: my_python_producer
     depends_on:
@@ -136,7 +136,7 @@ services:
   # Python Consumer (for consuming Kafka messages and inserting into PostgreSQL)
   consumer:
     build:
-      dockerfile: kafka.Dockerfile
+      dockerfile: docker/kafka/Dockerfile
       context: .
     container_name: my_python_consumer
     depends_on:
@@ -172,7 +172,7 @@ services:
   airflow:
     build:
       context: .
-      dockerfile: dockerfile_airflow/dockerfile
+      dockerfile: docker/airflow/Dockerfile
     container_name: dor_airflow
     env_file:
       - .env

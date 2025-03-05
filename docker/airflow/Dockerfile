@@ -12,7 +12,7 @@ RUN pip install --upgrade psycopg2-binary
 
 # Revenir en root pour copier et rendre le script exécutable
 USER root
-COPY dockerfile_airflow/entrypoint.sh /entrypoint.sh
+COPY ./docker/airflow/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Retourner à l'utilisateur airflow pour l'exécution

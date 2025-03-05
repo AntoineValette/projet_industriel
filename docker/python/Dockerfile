@@ -15,10 +15,10 @@ ENV PYTHONUNBUFFERED=1
 RUN apt update && apt upgrade -y && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /code/requirements.txt
+COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 WORKDIR /code
 
 # Copie le script Python
-COPY ./python/ ./
+COPY ../../python ./

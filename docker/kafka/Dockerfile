@@ -6,7 +6,7 @@ RUN apt update && apt install -y libpq-dev gcc
 # Installe psycopg2 et requests pour interagir avec PostgreSQL et GitLab
 RUN pip install psycopg2 kafka-python
 
-COPY ./python /app
+COPY ../../python /app
 
 WORKDIR /app
 
