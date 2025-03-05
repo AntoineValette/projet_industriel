@@ -108,7 +108,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_et_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(perte_de_paquets_raw) AS packet_loss_rate\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(perte_de_paquets_raw) AS packet_loss_rate\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -305,7 +305,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_et_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_du_ping_raw) AS avg_ping_time_ms,\n    MIN(minimum_raw) AS min_ping_time_ms,\n    MAX(maximum_raw) AS max_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_du_ping_raw) AS avg_ping_time_ms,\n    MIN(minimum_raw) AS min_ping_time_ms,\n    MAX(maximum_raw) AS max_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -386,7 +386,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_et_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(temps_mort_raw) AS total_downtime_seconds\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(temps_mort_raw) AS total_downtime_seconds\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
