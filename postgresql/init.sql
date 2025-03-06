@@ -429,6 +429,7 @@ CREATE TABLE IF NOT EXISTS dataset
     ETL_VUE_HEURE_AGG REAL,
     WEEKLY_SUNDAY REAL,
     PROG_INCONNU REAL,
+
     Total_Errors REAL,
     nb_operations REAL,
     rows_added REAL,

@@ -937,7 +937,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n  SUM(ColumnName_Error) AS total_Column_Name_Error,\n  SUM(ConnectionTimeout_Error) AS total_ConnectionTimeout_Error,\n  SUM(CreateTABLE_Error) AS total_CreateTABLE_Error,\n  SUM(DateFormat_Error) AS total_DateFormat_Error,\n  SUM(FieldSize_Error) AS total_FieldSize_Error,\n  SUM(GuidezAtelier_Error) AS total_Guidez_Atelier_Error,\n  SUM(Index_Error) AS total_Index_Error,\n  SUM(Object_Reference_Error) AS total_Object_Reference_Error,\n  SUM(Other_Error) AS total_Other_Error,\n  SUM(PreLogin_Error) AS total_PreLogin_Error,\n  SUM(Primary_Key_Error) AS total_Primary_Key_Error,\n  SUM(SQL_Invalid_Query_Error) AS total_SQL_Invalid_Query_Error,\n  SUM(SQL_Query_Timeout_Error) AS total_SQL_Query_Timeout_Error,\n  SUM(Time_Format_Error) AS total_Time_Format_Error,\n  SUM(Unique_Index_Error) AS total_Unique_Index_Error,\n  SUM(Value_DIV0_Error) AS total_Value_DIV0_Error,\n  SUM(Value_NAME_Error) AS total_Value_NAME_Error,\n  SUM(Value_REF_Error) AS total_Value_REF_Error,\n  SUM(Value_VALUE_Error) AS total_Value_VALUE_Error,\n  SUM(Web_Service_Error) AS total_Web_Service_Error\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
+          "rawSql": "SELECT \n  SUM(ColumnName_Error) AS total_ColumnName_Error,\n  SUM(ConnectionTimeout_Error) AS total_ConnectionTimeout_Error,\n  SUM(CreateTABLE_Error) AS total_CreateTABLE_Error,\n  SUM(DateFormat_Error) AS total_DateFormat_Error,\n  SUM(FieldSize_Error) AS total_FieldSize_Error,\n  SUM(GuidezAtelier_Error) AS total_Guidez_Atelier_Error,\n  SUM(Index_Error) AS total_Index_Error,\n  SUM(Object_Reference_Error) AS total_Object_Reference_Error,\n  SUM(Other_Error) AS total_Other_Error,\n  SUM(PreLogin_Error) AS total_PreLogin_Error,\n  SUM(Primary_Key_Error) AS total_Primary_Key_Error,\n  SUM(SQL_Invalid_Query_Error) AS total_SQL_Invalid_Query_Error,\n  SUM(SQL_Query_Timeout_Error) AS total_SQL_Query_Timeout_Error,\n  SUM(Time_Format_Error) AS total_Time_Format_Error,\n  SUM(UniqueIndex_Error) AS total_UniqueIndex_Error,\n  SUM(ValueDivBy0_Error) AS total_ValueDivBy0_Error,\n  SUM(ValueNAME_Error) AS total_ValueNAME_Error,\n  SUM(Value_REF_Error) AS total_Value_REF_Error,\n  SUM(ValueVALUE_Error) AS total_ValueVALUE_Error,\n  SUM(Web_Service_Error) AS total_Web_Service_Error\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1025,7 +1025,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "daily column Column_Name_Error"
+              "options": "daily column ColumnName_Error"
             },
             "properties": [
               {
@@ -1040,7 +1040,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Daily column Column_Name_Error"
+              "options": "Daily column ColumnName_Error"
             },
             "properties": [
               {
@@ -1115,7 +1115,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ColumnName_Error) as \"Daily column Column_Name_Error\",\n  SUM(ConnectionTimeout_Error) as \"Daily Connection_Timeout_Error\",\n  SUM(CreateTABLE_Error) as \"Daily CreateTABLE_Error\",\n\n  SUM(DateFormat_Error) as \"Daily column DateFormat_Error\",\n  SUM(Field_Size_Error) as \"Daily Field_Size_Error\",\n  SUM(Guidez_Atelier_Error) as \"Daily Guidez_Atelier_Error\",\n\n  SUM(Index_Error) as \"Daily column Index_Error\",\n  SUM(Object_Reference_Error) as \"Daily Object_Reference_Error\",\n  SUM(Other_Error) as \"Daily Other_Error\",\n\n  SUM(Pre_Login_Error) as \"Daily column Pre_Login_Error\",\n  SUM(Primary_Key_Error) as \"Daily Primary_Key_Error\",\n  SUM(SQL_Invalid_Query_Error) as \"Daily SQL_Invalid_Query_Error\",\n\n  SUM(SQL_Query_Timeout_Error) as \"Daily column SQL_QueryTimeout_Error\",\n  SUM(TimeFormat_Error) as \"Daily Time_Format_Error\",\n  SUM(Unique_Index_Error) as \"Daily Unique_Index_Error\",\n\n  SUM(Value_DIV0_Error) as \"Daily column Value_DIV0_Error\",\n  SUM(Value_NAME_Error) as \"Daily Value_NAME_Error\",\n  SUM(Value_REF_Error) as \"Daily Value_REF_Error\",\n\n  SUM(Value_VALUE_Error) as \"Daily column Value_VALUE_Error\",\n  SUM(Web_Service_Error) as \"Daily Web_Service_Error\"\n\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;\n\n",
+          "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ColumnName_Error) as \"Daily column ColumnName_Error\",\n  SUM(ConnectionTimeout_Error) as \"Daily ConnectionTimeout_Error\",\n  SUM(CreateTABLE_Error) as \"Daily CreateTABLE_Error\",\n\n  SUM(DateFormat_Error) as \"Daily column DateFormat_Error\",\n  SUM(FieldSize_Error) as \"Daily FieldSize_Error\",\n  SUM(GuidezAtelier_Error) as \"Daily GuidezAtelier_Error\",\n\n  SUM(IndexErrorSimilarToUniqueIndex_Error) as \"Daily column IndexErrorSimilarToUniqueIndex_Error\",\n  SUM(Object_Reference_Error) as \"Daily Object_Reference_Error\",\n  SUM(Other_Error) as \"Daily Other_Error\",\n\n  SUM(Pre_Login_Error) as \"Daily column Pre_Login_Error\",\n  SUM(Primary_Key_Error) as \"Daily Primary_Key_Error\",\n  SUM(SQL_Invalid_Query_Error) as \"Daily SQL_Invalid_Query_Error\",\n\n  SUM(SQL_Query_Timeout_Error) as \"Daily column SQL_QueryTimeout_Error\",\n  SUM(TimeFormat_Error) as \"Daily Time_Format_Error\",\n  SUM(UniqueIndex_Error) as \"Daily UniqueIndex_Error\",\n\n  SUM(ValueDivBy0_Error) as \"Daily column ValueDivBy0_Error\",\n  SUM(ValueNAME_Error) as \"Daily ValueNAME_Error\",\n  SUM(Value_REF_Error) as \"Daily Value_REF_Error\",\n\n  SUM(ValueVALUE_Error) as \"Daily column ValueVALUE_Error\",\n  SUM(Web_Service_Error) as \"Daily Web_Service_Error\"\n\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1219,7 +1219,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n  SUM(ETL_Achats) AS total_ETL_Achats,\n  SUM(ETL_BEXT) AS total_ETL_BEXT,\n  SUM(ETL_Chargement_PJ) AS total_ETL_Chargement_PJ,\n  SUM(ETL_GLPI) AS total_ETL_GLPI,\n  SUM(ETL_Heures_Chauffeurs) AS total_ETL_Heures_Chauffeurs,\n  SUM(ETL_JIRA) AS total_ETL_JIRA,\n  SUM(ETL_KPI_ALDI) AS total_ETL_KPI_ALDI,\n  SUM(ETL_Taxation) AS total_ETL_Taxation,\n  SUM(ETL_VUE_HEURE_AGG) AS total_ETL_VUE_HEURE_AGG,\n  SUM(ETL_SUR_ORDRE) AS total_ETL_sur_ordre,\n  SUM(ETL_API_JWT) AS total_ETL_API_JWT,\n  SUM(Tous_les_jours) AS total_Tous_les_jours,\n  SUM(Toutes_les_semaines_le_dimanche) AS total_Toutes_les_semaines_le_dimanche\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
+          "rawSql": "SELECT \n  SUM(ETL_Achats) AS total_ETL_Achats,\n  SUM(ETL_BEXT) AS total_ETL_BEXT,\n  SUM(ETL_Chargement_PJ) AS total_ETL_Chargement_PJ,\n  SUM(ETL_GLPI) AS total_ETL_GLPI,\n  SUM(ETL_Heures_Chauffeurs) AS total_ETL_Heures_Chauffeurs,\n  SUM(ETL_JIRA) AS total_ETL_JIRA,\n  SUM(ETL_KPI_ALDI) AS total_ETL_KPI_ALDI,\n  SUM(ETL_Taxation) AS total_ETL_Taxation,\n  SUM(ETL_VUE_HEURE_AGG) AS total_ETL_VUE_HEURE_AGG,\n  SUM(ETL_SUR_ORDRE) AS total_ETL_sur_ordre,\n  SUM(ETL_API_JWT) AS total_ETL_API_JWT,\n  SUM(daily) AS total_daily,\n  SUM(WEEKLY_SUNDAY) AS total_WEEKLY_SUNDAY\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1336,7 +1336,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ETL_Achats) as \"daily errors ETL_Achats\",\n  SUM(ETL_BEXT) as \"daily errors ETL_BEXT\",\n\n  SUM(ETL_Chargement_PJ) as \"daily errors ETL_Chargement_PJ\",\n  SUM(ETL_GLPI) as \"daily errors ETL_GLPI\",\n\n  SUM(ETL_Heures_Chauffeurs) as \"daily errors ETL_Heures_Chauffeurs\",\n  SUM(ETL_JIRA) as \"daily errors ETL_JIRA\",\n\n  SUM(ETL_KPI_ALDI) as \"daily errors ETL_KPI_ALDI\",\n  SUM(ETL_Taxation) as \"daily errors ETL_Taxation\",\n\n  SUM(ETLVueHeures_Agg) as \"daily errors ETLVueHeures_Agg\",\n  SUM(ETL_sur_ordre) as \"daily errors ETL_sur_ordre\",\n\n  SUM(ETL_API_JWT) as \"daily errors ETL_API_JWT\",\n  SUM(Tous_les_jours) as \"daily errors Tous_les_jours\",\n\n  SUM(Toutes_les_semaines_le_dimanche) as \"daily errors Toutes_les_semaines_le_dimanche\"\n  \nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;\n",
+          "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ETL_Achats) as \"daily errors ETL_Achats\",\n  SUM(ETL_BEXT) as \"daily errors ETL_BEXT\",\n\n  SUM(ETL_Chargement_PJ) as \"daily errors ETL_Chargement_PJ\",\n  SUM(ETL_GLPI) as \"daily errors ETL_GLPI\",\n\n  SUM(ETL_Heures_Chauffeurs) as \"daily errors ETL_Heures_Chauffeurs\",\n  SUM(ETL_JIRA) as \"daily errors ETL_JIRA\",\n\n  SUM(ETL_KPI_ALDI) as \"daily errors ETL_KPI_ALDI\",\n  SUM(ETL_Taxation) as \"daily errors ETL_Taxation\",\n\n  SUM(ETL_VUE_HEURE_AGG) as \"daily errors ETL_VUE_HEURE_AGG\",\n  SUM(ETL_sur_ordre) as \"daily errors ETL_sur_ordre\",\n\n  SUM(ETL_API_JWT) as \"daily errors ETL_API_JWT\",\n  SUM(daily) as \"daily errors daily\",\n\n  SUM(WEEKLY_SUNDAY) as \"daily errors WEEKLY_SUNDAY\"\n  \nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1479,7 +1479,7 @@
               "editorMode": "code",
               "format": "table",
               "rawQuery": true,
-              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ConnectionTimeout_Error + CreateTABLE_Error + DateFormat_Error + Field_Size_Error + Guidez_Atelier_Error + IndexErrorSimilarToUniqueIndex_Error + Object_Reference_Error + Other_Error + Pre_Login_Error + Primary_Key_Error + SQL_Invalid_Query_Error + SQL_Query_Timeout_Error + Time_Format_Error + Unique_Index_Error + ValueDIV0_Error + ValueNAME_Error + ValueREF_Error + ValueVALUE_Error + Web_Service_Error) AS total_erreurs\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
+              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ConnectionTimeout_Error + CreateTABLE_Error + DateFormat_Error + FieldSize_Error + Guidez_Atelier_Error + IndexErrorSimilarToUniqueIndex_Error + Object_Reference_Error + Other_Error + Pre_Login_Error + Primary_Key_Error + SQL_Invalid_Query_Error + SQL_Query_Timeout_Error + Time_Format_Error + UniqueIndex_Error + ValueDIV0_Error + ValueNAME_Error + ValueREF_Error + ValueVALUE_Error + Web_Service_Error) AS total_erreurs\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
               "refId": "A",
               "sql": {
                 "columns": [
