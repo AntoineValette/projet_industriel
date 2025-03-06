@@ -523,7 +523,7 @@
             "type": "grafana-postgresql-datasource",
             "uid": "dedjfow6t58n4e"
           },
-          "description": "SUM(total_errors)/(SUM(total_errors)+SUM(nb_operations))",
+          "description": "SUM(total_errors)/(SUM(total_errors)+SUM(nb_operations)+1)",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -609,7 +609,7 @@
               "editorMode": "code",
               "format": "table",
               "rawQuery": true,
-              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n   SUM(total_errors)/(SUM(total_errors)+SUM(nb_operations)) as \"taux d'erreur\"\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
+              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n   SUM(total_errors)/(SUM(total_errors)+SUM(nb_operations)+1) as \"taux d'erreur\"\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
               "refId": "A",
               "sql": {
                 "columns": [
@@ -937,7 +937,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n  SUM(ColumnName_Error) AS total_ColumnName_Error,\n  SUM(ConnectionTimeout_Error) AS total_ConnectionTimeout_Error,\n  SUM(CreateTABLE_Error) AS total_CreateTABLE_Error,\n  SUM(DateFormat_Error) AS total_DateFormat_Error,\n  SUM(FieldSize_Error) AS total_FieldSize_Error,\n  SUM(GuidezAtelier_Error) AS total_Guidez_Atelier_Error,\n  SUM(Index_Error) AS total_Index_Error,\n  SUM(ObjectReference_Error) AS total_ObjectReference_Error,\n  SUM(Other_Error) AS total_Other_Error,\n  SUM(PreLogin_Error) AS total_PreLogin_Error,\n  SUM(PrimaryKey_Error) AS total_PrimaryKey_Error,\n  SUM(SQLInvalidQuery_Error) AS total_SQLInvalidQuery_Error,\n  SUM(SQLQueryTimeout_Error) AS total_SQLQueryTimeout_Error,\n  SUM(Time_Format_Error) AS total_Time_Format_Error,\n  SUM(UniqueIndex_Error) AS total_UniqueIndex_Error,\n  SUM(ValueDivBy0_Error) AS total_ValueDivBy0_Error,\n  SUM(ValueNAME_Error) AS total_ValueNAME_Error,\n  SUM(ValueREF_Error) AS total_ValueREF_Error,\n  SUM(ValueVALUE_Error) AS total_ValueVALUE_Error,\n  SUM(WebService_Error) AS total_WebService_Error\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
+          "rawSql": "SELECT \n  SUM(ColumnName_Error) AS total_ColumnName_Error,\n  SUM(ConnectionTimeout_Error) AS total_ConnectionTimeout_Error,\n  SUM(CreateTABLE_Error) AS total_CreateTABLE_Error,\n  SUM(DateFormat_Error) AS total_DateFormat_Error,\n  SUM(FieldSize_Error) AS total_FieldSize_Error,\n  SUM(GuidezAtelier_Error) AS total_Guidez_Atelier_Error,\n  SUM(IndexErrorSimilarToUniqueIndex_Error) AS total_Index_Error,\n  SUM(ObjectReference_Error) AS total_ObjectReference_Error,\n  SUM(Other_Error) AS total_Other_Error,\n  SUM(PreLogin_Error) AS total_PreLogin_Error,\n  SUM(PrimaryKey_Error) AS total_PrimaryKey_Error,\n  SUM(SQLInvalidQuery_Error) AS total_SQLInvalidQuery_Error,\n  SUM(SQLQueryTimeout_Error) AS total_SQLQueryTimeout_Error,\n  SUM(TimeFormat_Error_Error) AS total_TimeFormat_Error_Error,\n  SUM(UniqueIndex_Error) AS total_UniqueIndex_Error,\n  SUM(ValueDivBy0_Error) AS total_ValueDivBy0_Error,\n  SUM(ValueNAME_Error) AS total_ValueNAME_Error,\n  SUM(ValueREF_Error) AS total_ValueREF_Error,\n  SUM(ValueVALUE_Error) AS total_ValueVALUE_Error,\n  SUM(WebService_Error) AS total_WebService_Error\nFROM dataset\nWHERE $__timeFilter(date_and_heure);",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1479,7 +1479,7 @@
               "editorMode": "code",
               "format": "table",
               "rawQuery": true,
-              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ConnectionTimeout_Error + CreateTABLE_Error + DateFormat_Error + FieldSize_Error + Guidez_Atelier_Error + IndexErrorSimilarToUniqueIndex_Error +ObjectReference_Error + Other_Error +PreLogin_Error + PrimaryKey_Error + SQLInvalidQuery_Error + SQLQueryTimeout_Error + Time_Format_Error + UniqueIndex_Error + ValueDIV0_Error + ValueNAME_Error + ValueREF_Error + ValueVALUE_Error + WebService_Error) AS total_erreurs\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
+              "rawSql": "SELECT\n  date_trunc('day', date_and_heure::timestamp) AS jour,\n  SUM(ConnectionTimeout_Error + CreateTABLE_Error + DateFormat_Error + FieldSize_Error + Guidez_Atelier_Error + IndexErrorSimilarToUniqueIndex_Error +ObjectReference_Error + Other_Error +PreLogin_Error + PrimaryKey_Error + SQLInvalidQuery_Error + SQLQueryTimeout_Error + TimeFormat_Error_Error + UniqueIndex_Error + ValueDIV0_Error + ValueNAME_Error + ValueREF_Error + ValueVALUE_Error + WebService_Error) AS total_erreurs\nFROM dataset\nWHERE $__timeFilter(date_and_heure)\nGROUP BY jour\nORDER BY jour;",
               "refId": "A",
               "sql": {
                 "columns": [
