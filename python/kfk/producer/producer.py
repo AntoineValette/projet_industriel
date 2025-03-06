@@ -3,7 +3,7 @@ import json
 import csv
 import sys
 from datetime import datetime
-from kfk.producer.classification_error import categorize_message
+from core.classification_error import categorize_message
 from kafka import KafkaProducer
 
 def log(msg):

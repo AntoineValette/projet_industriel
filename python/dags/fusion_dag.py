@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import pandas as pd
+from classification_error import dorErrorDict, dorProgrammDict, categorize_programm
 
 from filtrage_logs_server import get_ping_filtered, get_ram_filtered, get_reseau_filtered,get_memoire_filtered, get_sql_lock_filtered, get_swap_filtered, get_sql_statistic_filtered, get_storage_filtered, get_sql_general_filetered
 from db_utils import get_db_connection
@@ -62,20 +63,38 @@ def fusion_horaire():
     """préparation de df_logERR"""
     # Conversion de la colonne ETL_StartDateTime en Datetime pandas
     df_logErr['etl_start_datetime'] = pd.to_datetime(df_logErr['etl_start_datetime'], format="%Y-%m-%d %H:%M:%S")
-    # Ajout d'une colonne Date et heure ne tenant pas compte des minutes
-    df_logErr["Date et heure"] = df_logErr["etl_start_datetime"].dt.floor("h")
+    # Ajout d'une colonne date_and_heure ne tenant pas compte des minutes
+    df_logErr["date_and_heure"] = df_logErr["etl_start_datetime"].dt.floor("h")
 
+    # DEBUT CODE MANON modif du contenu de la colonne type_error pour nettoyer les noms
+    df_logErr['program_name'] = df_logErr['program_name'].apply(categorize_programm)
+    # FIN CODE MANON
 
     print("-----------préparation de logERR terminée-----------")
 
     """Utiliser des crosstab (ou pivot) et joindre les DataFrames"""
-    # Comptage des catégories par Date et heure
-    df_cat = pd.crosstab(df_logErr["Date et heure"], df_logErr["type_error"])
-    # Comptage des programmes par Date et heure
-    df_prog = pd.crosstab(df_logErr["Date et heure"], df_logErr["program_name"])
-    # Joindre les deux sur l'index (qui est "Date et heure" dans les 2 crosstabs)
+    # Comptage des catégories par date_and_heure
+    df_cat = pd.crosstab(df_logErr["date_and_heure"], df_logErr["type_error"])
+
+    # DEBUT CODE MANON
+    # Ajouter les colonnes manquantes et les initialiser à zéro
+    for error in dorErrorDict.keys():
+        if error not in df_cat.columns:
+            df_cat[error] = 0
+    # FIN CODE MANON
+
+    # Comptage des programmes par date_and_heure
+    df_prog = pd.crosstab(df_logErr["date_and_heure"], df_logErr["program_name"])
+    # DEBUT CODE MANON
+    # Ajouter les colonnes manquantes et les initialiser à zéro
+    for old,new in dorProgrammDict.items():
+        if old not in df_prog.columns and old != "":
+            df_prog[old] = 0
+    # FIN CODE MANON
+
+    # Joindre les deux sur l'index (qui est "date_and_heure" dans les 2 crosstabs)
     df_error_grouped2 = df_cat.join(df_prog, how="outer")
-    # Remettre "Date et heure" en colonne si besoin
+    # Remettre "date_and_heure" en colonne si besoin
     df_error_grouped2 = df_error_grouped2.reset_index()
 
     print("-----------transformation/enrichissement de logERR terminée-----------")
@@ -97,9 +116,9 @@ def fusion_horaire():
     df_reduced = df_logOk
 
     """suite de la préparation de df_logOK"""
-    # Ajout d'une colonne Date et heure ne tenant pas compte des minutes
-    df_reduced.loc[:, "Date et heure"] = df_reduced["etl_startdatetime"].dt.floor("h")
-    df_grouped = df_reduced.groupby("Date et heure").agg(
+    # Ajout d'une colonne date_and_heure ne tenant pas compte des minutes
+    df_reduced.loc[:, "date_and_heure"] = df_reduced["etl_startdatetime"].dt.floor("h")
+    df_grouped = df_reduced.groupby("date_and_heure").agg(
         nb_operations=("insert_mode", "count"),  # Nombre total de lignes dans l'heure
         rows_added=("rows_added", "sum"),  # Somme des lignes ajoutées
         rows_updated=("rows_updated", "sum"),  # Somme des mises à jour
@@ -111,7 +130,7 @@ def fusion_horaire():
     """fusion des log ok et log erreur"""
     df_final = df_error_grouped2.merge(
         df_grouped,
-        on="Date et heure",
+        on="date_and_heure",
         how="outer",
     )
 
@@ -125,14 +144,14 @@ def fusion_horaire():
            df_sql_management_storage, df_ram, df_cpu]
     df_server_stats = reduce(lambda left, right: pd.merge(left, right, on="date_heure", how="outer"), dfs)
 
-    df_server_stats['Date et heure'] = pd.to_datetime(df_server_stats['date_heure'])
+    df_server_stats['date_and_heure'] = pd.to_datetime(df_server_stats['date_heure'])
 
     print("-----------fusion des dataframes des logs servers terminée-----------")
 
     # Fusion des deux df conso
     df_global = df_final.merge(
         df_server_stats,
-        on="Date et heure",
+        on="date_and_heure",
         how="outer",
     )
     df_global = df_global.fillna(0)
@@ -141,8 +160,13 @@ def fusion_horaire():
 
     df_global = df_global.drop(columns='date_heure')
 
+    # code manon
+    df_global.columns = df_global.columns.str.lower()
+    # fin code manon
+
     """enregistrement"""
     with get_db_connection() as conn:
+
         df_global.to_sql("dataset", if_exists='append', index=False, con=conn)
     
     print("-----------enregistrement terminée-----------")

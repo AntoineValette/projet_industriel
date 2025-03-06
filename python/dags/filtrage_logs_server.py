@@ -369,7 +369,8 @@ def get_swap_filtered(tab: pd.DataFrame):
     # renommage des colonnes
     tab.rename(columns={"temps_mort_mem_raw": "swap Temps mort(%)"}, inplace=True)
     tab.rename(columns={"couverture_mem_raw": "swap Couverture(%)"}, inplace=True)
-    tab.rename(columns={"total_raw": "total swap(%)"}, inplace=True)
+    tab.rename(columns={"total": "total swap(%)"}, inplace=True)
+    tab.rename(columns={"total_raw": "total_swap"}, inplace=True)
 
     tab = tab.drop(columns=["swap Temps mort(%)"])
     tab = tab.drop(columns=["swap Couverture(%)"])

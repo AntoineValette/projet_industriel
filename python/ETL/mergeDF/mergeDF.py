@@ -5,7 +5,7 @@ import pandas as pd
 
 from core.log import log
 from core.settings import Settings
-from ETL.mergeDF.categorizeError import categorize_message
+from core.classification_error import categorize_message
 
 def mergeDF():
     filename = "/data/dataset_LogETL_LogServer.csv"
