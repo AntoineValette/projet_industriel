@@ -51,6 +51,7 @@ services:
           condition: service_healthy
     volumes:
       - ./data:/data
+      - shared-data:/shared
     entrypoint: ["python", "smartETL.py"]
     networks:
       dor_network:
@@ -145,6 +146,8 @@ services:
     entrypoint: ["python", "consumer.py"]
     env_file:
       - .env
+    volumes:
+      - shared-data:/shared
     networks:
       dor_network:
         aliases:
@@ -199,6 +202,7 @@ volumes:
   postgres-data:
   grafana-data:
   logs_data:
+  shared-data:
 
 networks:
   dor_network:
