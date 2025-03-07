@@ -1,5 +1,6 @@
 from ETL.logParquet.import_parquet import import_parquet
 from ETL.logServer.logServer import logServer
+from ETL.mergeDF.mergeDF import create_historical_dataset
 from waiting.wait_for_postgres import wait_for_postgres
 from waiting.wait_for_import import wait_for_import
 
@@ -16,3 +17,6 @@ if __name__ == "__main__":
 
     # attente de l'import historique par kafka
     wait_for_import()
+
+    # création du dataset fusionné
+    create_historical_dataset()
