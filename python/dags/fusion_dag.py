@@ -3,16 +3,23 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import pandas as pd
 from classification_error import dorErrorDict, dorProgrammDict, categorize_programm
-
-from filtrage_logs_server import get_ping_filtered, get_ram_filtered, get_reseau_filtered,get_memoire_filtered, get_sql_lock_filtered, get_swap_filtered, get_sql_statistic_filtered, get_storage_filtered, get_sql_general_filetered
+from filtrage_logs_server import (
+    get_ping_filtered, get_cpu_filtered, get_ram_filtered, get_reseau_filtered,
+    get_memoire_filtered, get_sql_lock_filtered, get_swap_filtered,
+    get_sql_statistic_filtered, get_storage_filtered, get_sql_general_filetered
+)
 from db_utils import get_db_connection
 from functools import reduce
-from filtrage_logs_server import get_cpu_filtered
+import os
+import pytz
+
+start_date_str = os.getenv('START_DATE', '2025-03-11T00:00:00')
+start = datetime.fromisoformat(start_date_str)
 
 # Paramètres par défaut du DAG
 default_args = {
     'owner': 'airflow',
-    'start_date': datetime(2023, 1, 1),
+    'start_date': start,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
@@ -21,160 +28,138 @@ default_args = {
 dag = DAG(
     'hourly_etl_job',
     default_args=default_args,
-    description='ETL : extraction des dernières 60 min de chaque table, traitement, et écriture dans la table dataset',
-    schedule='@hourly',
+    description='ETL horaire : extraction des 60 dernières minutes de chaque table, traitement et écriture dans "dataset"',
+    schedule_interval='3 * * * *',
     catchup=False,
-    is_paused_upon_creation=True  # Le DAG sera inactif dès sa création = à modifier pour prod
+    is_paused_upon_creation=True
 )
 
-
-def get_df(since: datetime, table: str) -> pd.DataFrame:
-    """
-    Fonction pour requêter la base postgres et renvoyer un dataframe correspondant
-    """
+def get_df(since: datetime, until: datetime, table: str) -> pd.DataFrame:
     with get_db_connection() as conn:
-        # Vous pouvez utiliser pd.read_sql pour simplifier
-        query = f"SELECT * FROM {table} WHERE dt_insertion >= '{since.isoformat()}'"
+        if table in ["logOK", "logERR"]:
+            query = f"""
+                SELECT * FROM {table}
+                WHERE etl_start_datetime >= '{since.isoformat()}'
+                AND etl_start_datetime < '{until.isoformat()}'
+            """
+        else:
+            query = f"""
+                SELECT * FROM {table}
+                WHERE date_heure >= '{since.isoformat()}'
+                AND date_heure < '{until.isoformat()}'
+            """
         df = pd.read_sql(query, conn)
+
+    if df.empty:
+        print(f"⚠️ Aucune donnée trouvée pour {table} entre {since} et {until}.")
+        if table in ["logOK", "logERR"]:
+            return pd.DataFrame(columns=["etl_start_datetime", "program_name", "type_error"])
+        else:
+            return pd.DataFrame(columns=["date_heure"])
+
     return df
 
+def fusion_horaire(data_interval_start, data_interval_end):
+    # Définition des timezones
+    cet = pytz.timezone('Europe/Paris')
 
-def fusion_horaire():
-    now = datetime.now()
-    since = now - timedelta(minutes=60)
+    # Vérifie si les intervalles sont des chaînes et les convertit uniquement si nécessaire
+    if isinstance(data_interval_start, str):
+        data_interval_start = datetime.fromisoformat(data_interval_start)  # Déjà en UTC
+    if isinstance(data_interval_end, str):
+        data_interval_end = datetime.fromisoformat(data_interval_end)  # Déjà en UTC
 
-    """chargelent des données depuis Postgres"""
-    df_logOk = get_df(since, "logOK")
-    df_logErr = get_df(since, "logERR")
+    # Conversion vers CET (Europe/Paris)
+    data_interval_start = data_interval_start.astimezone(cet)
+    data_interval_end = data_interval_end.astimezone(cet)
 
-    df_ping = get_ping_filtered(get_df(since, "myreport_ping"))
-    df_cpu = get_cpu_filtered(get_df(since, "myreport_cpu"))
-    df_ram = get_ram_filtered(get_df(since, "myreport_ram"))
-    df_reseau = get_reseau_filtered(get_df(since, "myreport_reseau"))
-    df_sql_management_storage = get_memoire_filtered(get_df(since, "myreport_memoire"))
-    df_sql_lock = get_sql_lock_filtered(get_df(since, "myreport_sql_lock"))
-    df_swap = get_swap_filtered(get_df(since, "myreport_swap"))
-    df_sql_statistic = get_sql_statistic_filtered(get_df(since, "myreport_sql_statistic"))
-    df_storage = get_storage_filtered(get_df(since, "myreport_espace_disque"))
-    df_sql_general = get_sql_general_filetered(get_df(since, "myreport_sql_general"))
+    start_of_last_hour = data_interval_start
+    end_of_last_hour = data_interval_end
 
-    print("-----------importation des dataframes terminée-----------")
+    df_logOk = get_df(start_of_last_hour, end_of_last_hour, "logOK")
+    df_logErr = get_df(start_of_last_hour, end_of_last_hour, "logERR")
 
-    """préparation de df_logERR"""
-    # Conversion de la colonne ETL_StartDateTime en Datetime pandas
+    tables_functions = {
+        "myreport_ping": get_ping_filtered,
+        "myreport_cpu": get_cpu_filtered,
+        "myreport_ram": get_ram_filtered,
+        "myreport_reseau": get_reseau_filtered,
+        "myreport_memoire": get_memoire_filtered,
+        "myreport_sql_lock": get_sql_lock_filtered,
+        "myreport_swap": get_swap_filtered,
+        "myreport_sql_statistic": get_sql_statistic_filtered,
+        "myreport_espace_disque": get_storage_filtered,
+        "myreport_sql_general": get_sql_general_filetered
+    }
+
+    df_dict = {}
+    for table, filter_func in tables_functions.items():
+        df = get_df(start_of_last_hour, end_of_last_hour, table)
+        if not df.empty:
+            df = filter_func(df)
+        df_dict[table] = df
+
+    if df_logOk.empty and df_logErr.empty and all(df.empty for df in df_dict.values()):
+        print("⚠️ Aucune donnée disponible dans aucune table. Fin du traitement.")
+        return
+
+    print("✅ Importation des DataFrames terminée.")
+
     df_logErr['etl_start_datetime'] = pd.to_datetime(df_logErr['etl_start_datetime'], format="%Y-%m-%d %H:%M:%S")
-    # Ajout d'une colonne date_and_heure ne tenant pas compte des minutes
     df_logErr["date_and_heure"] = df_logErr["etl_start_datetime"].dt.floor("h")
-
-    # DEBUT CODE MANON modif du contenu de la colonne type_error pour nettoyer les noms
     df_logErr['program_name'] = df_logErr['program_name'].apply(categorize_programm)
-    # FIN CODE MANON
 
-    print("-----------préparation de logERR terminée-----------")
-
-    """Utiliser des crosstab (ou pivot) et joindre les DataFrames"""
-    # Comptage des catégories par date_and_heure
     df_cat = pd.crosstab(df_logErr["date_and_heure"], df_logErr["type_error"])
-
-    # DEBUT CODE MANON
-    # Ajouter les colonnes manquantes et les initialiser à zéro
-    for error in dorErrorDict.keys():
+    for error in dorErrorDict:
         if error not in df_cat.columns:
             df_cat[error] = 0
-    # FIN CODE MANON
 
-    # Comptage des programmes par date_and_heure
     df_prog = pd.crosstab(df_logErr["date_and_heure"], df_logErr["program_name"])
-    # DEBUT CODE MANON
-    # Ajouter les colonnes manquantes et les initialiser à zéro
-    for old,new in dorProgrammDict.items():
-        if old not in df_prog.columns and old != "":
-            df_prog[old] = 0
-    # FIN CODE MANON
+    for prog in dorProgrammDict:
+        if prog not in df_prog.columns and prog != "":
+            df_prog[prog] = 0
 
-    # Joindre les deux sur l'index (qui est "date_and_heure" dans les 2 crosstabs)
-    df_error_grouped2 = df_cat.join(df_prog, how="outer")
-    # Remettre "date_and_heure" en colonne si besoin
-    df_error_grouped2 = df_error_grouped2.reset_index()
+    df_errors = df_cat.join(df_prog, how="outer").reset_index()
+    print("✅ Préparation de logERR terminée.")
 
-    print("-----------transformation/enrichissement de logERR terminée-----------")
-
-    # sommer le nb d'erreurs dans les colonnes erreur pour la vérification
-    error_columns = [col for col in df_error_grouped2.columns if "Error" in col]
-    df_error_grouped2["Total_Errors"] = df_error_grouped2[error_columns].sum(axis=1)
-
-    """préparation de df_logOK"""
-    # Conversion de la colonne ETL_StartDateTime en Datetime pandas
-    df_logOk['etl_startdatetime'] = pd.to_datetime(df_logOk['etl_startdatetime'], format="%d/%m/%Y %H:%M")
-
-    """Réduction du df pour qu'il soit dans la bonne période ==>> SUPPRIMER CA POUR MISE EN PROD"""
-    """
-    start_date = df_logErr['etl_start_datetime'].min()
-    end_date = df_logErr['etl_start_datetime'].max()
-    df_reduced = df_logOk[(df_logOk['etl_startdatetime'] >= start_date) & (df_logOk['etl_startdatetime'] <= end_date)]
-    """
-    df_reduced = df_logOk
-
-    """suite de la préparation de df_logOK"""
-    # Ajout d'une colonne date_and_heure ne tenant pas compte des minutes
-    df_reduced.loc[:, "date_and_heure"] = df_reduced["etl_startdatetime"].dt.floor("h")
-    df_grouped = df_reduced.groupby("date_and_heure").agg(
-        nb_operations=("insert_mode", "count"),  # Nombre total de lignes dans l'heure
-        rows_added=("rows_added", "sum"),  # Somme des lignes ajoutées
-        rows_updated=("rows_updated", "sum"),  # Somme des mises à jour
-        rows_deleted=("rows_deleted", "sum")  # Somme des suppressions
+    df_logOk['etl_start_datetime'] = pd.to_datetime(df_logOk['etl_start_datetime'], format="%d/%m/%Y %H:%M")
+    df_logOk["date_and_heure"] = df_logOk["etl_start_datetime"].dt.floor("h")
+    df_logOk_grouped = df_logOk.groupby("date_and_heure").agg(
+        nb_operations=("insert_mode", "count"),
+        rows_added=("rows_added", "sum"),
+        rows_updated=("rows_updated", "sum"),
+        rows_deleted=("rows_deleted", "sum")
     ).reset_index()
+    print("✅ Préparation de logOK terminée.")
 
-    print("-----------préparation de logOK terminée-----------")
+    df_logs = df_errors.merge(df_logOk_grouped, on="date_and_heure", how="outer").fillna(0)
 
-    """fusion des log ok et log erreur"""
-    df_final = df_error_grouped2.merge(
-        df_grouped,
-        on="date_and_heure",
-        how="outer",
-    )
+    df_server_stats = reduce(lambda l, r: pd.merge(l, r, on="date_heure", how="outer"), df_dict.values())
+    df_server_stats = df_server_stats.rename(columns={'date_heure': 'date_and_heure'})
+    df_server_stats['date_and_heure'] = pd.to_datetime(df_server_stats['date_and_heure'])
+    print("✅ Fusion des logs serveurs terminée.")
 
-    # Changement des valeurs NaN en 0
-    df_final = df_final.fillna(0)
-
-    print("-----------fusion de logERR et logOK terminée-----------")
-
-    """Fusion des DF de stat server"""
-    dfs = [df_reseau, df_sql_statistic, df_sql_lock, df_sql_general, df_ping, df_storage, df_swap,
-           df_sql_management_storage, df_ram, df_cpu]
-    df_server_stats = reduce(lambda left, right: pd.merge(left, right, on="date_heure", how="outer"), dfs)
-
-    df_server_stats['date_and_heure'] = pd.to_datetime(df_server_stats['date_heure'])
-
-    print("-----------fusion des dataframes des logs servers terminée-----------")
-
-    # Fusion des deux df conso
-    df_global = df_final.merge(
-        df_server_stats,
-        on="date_and_heure",
-        how="outer",
-    )
-    df_global = df_global.fillna(0)
-
-    print("-----------fusion de globale terminée-----------")
-
-    df_global = df_global.drop(columns='date_heure')
-
-    # code manon
+    df_global = df_logs.merge(df_server_stats, on="date_and_heure", how="outer").fillna(0)
     df_global.columns = df_global.columns.str.lower()
-    # fin code manon
+    print("✅ Fusion globale terminée.")
 
-    """enregistrement"""
     with get_db_connection() as conn:
+        existing_dates = pd.read_sql("SELECT date_and_heure FROM dataset", conn)
+        new_rows = df_global[~df_global['date_and_heure'].isin(existing_dates['date_and_heure'])]
 
-        df_global.to_sql("dataset", if_exists='append', index=False, con=conn)
-    
-    print("-----------enregistrement terminée-----------")
+        if not new_rows.empty:
+            new_rows.to_sql("dataset", if_exists='append', index=False, con=conn)
+            print("✅ Nouvelles lignes insérées dans la table dataset.")
+        else:
+            print("⚠️ Aucune nouvelle ligne à insérer.")
 
 
-# Définition du PythonOperator pour exécuter le job ETL
 etl_task = PythonOperator(
     task_id='hourly_etl_task',
     python_callable=fusion_horaire,
+    op_kwargs={
+        'data_interval_start': '{{ data_interval_start }}',
+        'data_interval_end': '{{ data_interval_end }}'
+    },
     dag=dag
 )

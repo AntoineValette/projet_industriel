@@ -1,6 +1,7 @@
 import csv
 import os
 import psycopg2
+from datetime import datetime
 
 from core.log import log
 from core.settings import Settings
@@ -21,6 +22,10 @@ def myreport_espace_disque():
                     continue
                 if any("Moyennes" in value for value in row.values()):
                     continue
+                # Conversion de la première colonne en date
+                date_heure_str = row[reader.fieldnames[0]]
+                date_heure = date_heure_str.split(" - ")[0]
+                row['Date et heure'] = datetime.strptime(date_heure, "%d/%m/%Y %H:%M:%S")
                 cur.execute("""
                     INSERT INTO myreport_espace_disque (
              	        date_heure,date_heure_raw,
