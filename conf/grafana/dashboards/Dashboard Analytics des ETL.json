@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -1627,7 +1627,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Mon premier dashboard",
+  "title": "Dashboard Analytics des ETL",
   "uid": "decl3bnqmmb5sd",
   "version": 1,
   "weekStart": ""
