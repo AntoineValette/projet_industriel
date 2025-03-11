@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS logOK (
 	project_name VARCHAR(255),
 	product VARCHAR(255),
 	resultat VARCHAR(255),
-	etl_startdatetime TIMESTAMP,
+	etl_start_datetime TIMESTAMP,
 	launcher_Id VARCHAR(255),
 	launcher_Name VARCHAR(255),
 	program_id VARCHAR(255),
@@ -68,20 +68,20 @@ CREATE TABLE IF NOT EXISTS logERR (
 CREATE TABLE IF NOT EXISTS myreport_ping (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
 	temps_du_ping varchar(255),
 	temps_du_ping_raw decimal,
 	minimum VARCHAR(255),
 	minimum_raw decimal,
 	maximum VARCHAR(255),
-    	maximum_raw decimal,
-    	perte_de_paquets VARCHAR(255),
-    	perte_de_paquets_raw decimal,
-    	temps_mort VARCHAR(255),
-    	temps_mort_raw decimal,
-    	couverture VARCHAR(255),
-    	couverture_raw decimal
+    maximum_raw decimal,
+    perte_de_paquets VARCHAR(255),
+    perte_de_paquets_raw decimal,
+    temps_mort VARCHAR(255),
+    temps_mort_raw decimal,
+    couverture VARCHAR(255),
+    couverture_raw decimal
 );
 
 -- création de la table myreport_cpu
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS myreport_cpu
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     Somme VARCHAR(255),
     Somme_RAW REAL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS myreport_ram
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     memoire_disponible_pct VARCHAR(255),
     memoire_disponible_pct_RAW REAL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS myreport_reseau
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     Somme_Volume VARCHAR(255),
     Somme_Volume_RAW REAL,
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS myreport_memoire
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     MemConnexion VARCHAR(255),
     MemConnexion_RAW REAL,
@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS myreport_sql_lock
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     nombre_requetes_verrouillage VARCHAR(255),
     nombre_requetes_verrouillage_RAW REAL,
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS myreport_swap
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     Total VARCHAR(255),
     Total_RAW REAL,
@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS myreport_sql_statistic
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     nombre_requetes_lots VARCHAR(255),
     nombre_requetes_lots_raw REAL,
@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS myreport_espace_disque
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
- 	date_heure VARCHAR(255),
+ 	date_heure timestamp,
     date_heure_raw REAL,
     somme VARCHAR(255),
     somme_RAW REAL,
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS myreport_sql_general
 (
 	ident BIGSERIAL, -- champs autoincrement
     dt_insertion timestamp DEFAULT now(), -- champs watermark / windowed
-	date_heure VARCHAR(255),
+	date_heure timestamp,
     date_heure_raw REAL,
     Connexions_user VARCHAR(255),
     Connexions_user_raw REAL,

@@ -12,7 +12,7 @@ USER airflow
 # COPY ./docker/airflow/requirements.txt /code/requirements.txt
 # RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-RUN pip install --upgrade psycopg2-binary
+RUN pip install --upgrade psycopg2-binary pytz
 
 # Revenir en root pour copier et rendre le script exécutable
 USER root
