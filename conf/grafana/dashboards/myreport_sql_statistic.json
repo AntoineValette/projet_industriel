@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 11,
   "links": [],
   "panels": [
     {
@@ -87,6 +87,232 @@
         "x": 0,
         "y": 0
       },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "dedjfow6t58n4e"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(nombre_requetes_lots_raw) AS avg_requetes_lots\nFROM myreport_sql_statistic\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "myreport_sql_statistic"
+        }
+      ],
+      "title": "SQL Requests Over Time ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "dedjfow6t58n4e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(recompilations_sql_raw) AS avg_recompilations_per_sec\nFROM myreport_sql_statistic\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "myreport_sql_statistic"
+        }
+      ],
+      "title": "SQL Recompilations Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "dedjfow6t58n4e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
       "id": 1,
       "options": {
         "legend": {
@@ -101,7 +327,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
           "datasource": {
@@ -201,7 +427,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 8
       },
       "id": 3,
       "options": {
@@ -217,7 +443,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
           "editorMode": "code",
@@ -245,7 +471,7 @@
           "table": "myreport_sql_statistic"
         }
       ],
-      "title": "SQL Coverage Efficiency",
+      "title": "SQL Coverage Over Time (%)",
       "type": "timeseries"
     },
     {
@@ -304,7 +530,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -312,9 +539,9 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 16
       },
-      "id": 5,
+      "id": 6,
       "options": {
         "legend": {
           "calcs": [],
@@ -328,13 +555,17 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.5.1",
       "targets": [
         {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "dedjfow6t58n4e"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(recompilations_sql_raw) AS avg_recompilations_per_sec\nFROM myreport_sql_statistic\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_mort_raw) AS sql_statistic_dead_time\nFROM myreport_sql_statistic\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -356,7 +587,7 @@
           "table": "myreport_sql_statistic"
         }
       ],
-      "title": "SQL Recompilations Over Time",
+      "title": "SQL Statistics Dead Time Over Time (%)",
       "type": "timeseries"
     }
   ],
@@ -375,6 +606,6 @@
   "timezone": "browser",
   "title": "myreport_sql_statistic dashboard",
   "uid": "dedo6qasrckxsb",
-  "version": 15,
+  "version": 1,
   "weekStart": ""
 }
