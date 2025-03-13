@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -335,7 +335,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(processeur_1_raw) AS cpu_core_1,\n    AVG(processeur_2_raw) AS cpu_core_2,\n    AVG(processeur_3_raw) AS cpu_core_3,\n    AVG(processeur_4_raw) AS cpu_core_4,\n    AVG(processeur_5_raw) AS cpu_core_5,\n    AVG(processeur_6_raw) AS cpu_core_6,\n    AVG(processeur_7_raw) AS cpu_core_7,\n    AVG(processeur_8_raw) AS cpu_core_8\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(processeur_1_raw) AS cpu_core_1,\n    AVG(processeur_2_raw) AS cpu_core_2,\n    AVG(processeur_3_raw) AS cpu_core_3,\n    AVG(processeur_4_raw) AS cpu_core_4,\n    AVG(processeur_5_raw) AS cpu_core_5,\n    AVG(processeur_6_raw) AS cpu_core_6,\n    AVG(processeur_7_raw) AS cpu_core_7,\n    AVG(processeur_8_raw) AS cpu_core_8\nFROM myreport_cpu\nWHERE date_heure  BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -447,7 +447,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -539,7 +539,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -651,7 +651,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_cpu_raw) AS cpu_dead_time_pct\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_cpu_raw) AS cpu_dead_time_pct\nFROM myreport_cpu\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
