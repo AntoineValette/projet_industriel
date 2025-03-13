@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -112,7 +112,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(octetlibred_raw) / POWER(1024, 3) AS total_disk_space_gb -- Convert to GB\nFROM myreport_espace_disque\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(octetlibred_raw) / POWER(1024, 3) AS total_disk_space_gb -- Convert to GB\nFROM myreport_espace_disque\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -228,7 +228,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(espacedisponibled_raw) AS free_disk_space_pct \nFROM myreport_espace_disque\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(espacedisponibled_raw) AS free_disk_space_pct \nFROM myreport_espace_disque\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -344,7 +344,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(octetlibrec_raw) / POWER(1024, 3) AS total_disk_space_gb -- Convert to GB\nFROM myreport_espace_disque\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(octetlibrec_raw) / POWER(1024, 3) AS total_disk_space_gb -- Convert to GB\nFROM myreport_espace_disque\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -460,7 +460,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(espacedisponiblec_raw) AS free_disk_space_pct \nFROM myreport_espace_disque\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(espacedisponiblec_raw) AS free_disk_space_pct \nFROM myreport_espace_disque\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -572,7 +572,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('day', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n    AVG(somme_raw / 1024 / 1024 / 1024) AS avg_used_space_gb\nFROM myreport_espace_disque\nWHERE TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw / 1024 / 1024 / 1024) AS avg_used_space_gb\nFROM myreport_espace_disque\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -667,7 +667,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        DATE_TRUNC('hour', \n            TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')\n        ) AS time,\n        (somme_raw / 1024 / 1024 / 1024) AS \"Espace utilisé (Go)\" -- Convert bytes to GB\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT date_heure AS time,\n        (somme_raw / 1024 / 1024 / 1024) AS \"Espace utilisé (Go)\" -- Convert bytes to GB\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -779,7 +779,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        somme_raw / 1024 / 1024 / 1024 AS used_space_GB,  -- Conversion en Go\n        octetlibrec_raw / 1024 / 1024 / 1024 AS free_space_GB  -- Conversion en Go\n    FROM myreport_espace_disque\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        somme_raw / 1024 / 1024 / 1024 AS used_space_GB,  -- Conversion en Go\n        octetlibrec_raw / 1024 / 1024 / 1024 AS free_space_GB  -- Conversion en Go\n    FROM myreport_espace_disque\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -898,7 +898,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        somme_raw / 1024 / 1024 / 1024 AS used_space_gb  -- Convert bytes to GB\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        somme_raw / 1024 / 1024 / 1024 AS used_space_gb  -- Convert bytes to GB\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -971,7 +971,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1013,7 +1014,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temp_mort_raw) AS espace_disque_dead_time\nFROM myreport_espace_disque\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temp_mort_raw) AS espace_disque_dead_time\nFROM myreport_espace_disque\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1086,7 +1087,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1128,7 +1130,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        couverture_raw/100 AS couverture_espace_disque_pct\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        couverture_raw/100 AS couverture_espace_disque_pct\n    FROM myreport_espace_disque\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1169,6 +1171,6 @@
   "timezone": "browser",
   "title": "myreport_espace_disque",
   "uid": "bedkx2kixjm68a",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }
