@@ -31,7 +31,7 @@ conda create -n smartETL-dev
 conda activate smartETL-dev
 conda install python=3.12.8
 conda install sqlalchemy pandas psycopg2 fastparquet
-conda install jupyterlab matplotlib seaborn scikit-learn numpy  plotly lxml  
+conda install jupyterlab matplotlib seaborn scikit-learn numpy  plotly lxml   pyarrow apache-airflow confluent-kafka    
 ```
 Regénérer le fichier requirements-dev.txt
 ```

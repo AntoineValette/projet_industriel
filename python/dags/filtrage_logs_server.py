@@ -5,7 +5,7 @@ def format_datetime(tab:pd.DataFrame, colonne_datetime: str):
     transformation de la colonne "date_heure" du dataframe en pd.datetime
     application d'un filtre sur les dates ==>> à supprimer pour la prod
     """
-    tab[colonne_datetime] = tab[colonne_datetime].str.split(" - ").str[0]
+    #tab[colonne_datetime] = tab[colonne_datetime].str.split(" - ").str[0]
     tab[colonne_datetime] = pd.to_datetime(tab[colonne_datetime], format="%d/%m/%Y %H:%M:%S")
 
     """

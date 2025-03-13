@@ -40,7 +40,7 @@ def consummer():
         else:
             if message.topic == 'logOK_topic':
                 cur.execute("""
-                    INSERT INTO logOK (server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, etl_startdatetime, launcher_Id, launcher_Name, program_id, program_name, schedules_id, schedules_name, schedules_startdatetime) 
+                    INSERT INTO logOK (server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, etl_start_datetime, launcher_Id, launcher_Name, program_id, program_name, schedules_id, schedules_name, schedules_startdatetime) 
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, tuple(data.values()))
 

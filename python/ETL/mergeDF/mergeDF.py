@@ -66,8 +66,8 @@ def create_historical_dataset():
     df_error_grouped2["Total_Errors"] = df_error_grouped2[error_columns].sum(axis=1)
 
     """Préparation de df_logOK"""
-    df_logOk['etl_startdatetime'] = pd.to_datetime(df_logOk['etl_startdatetime'], format="%d/%m/%Y %H:%M")
-    df_logOk["date_and_heure"] = df_logOk["etl_startdatetime"].dt.floor("h")
+    df_logOk['etl_start_datetime'] = pd.to_datetime(df_logOk['etl_start_datetime'], format="%d/%m/%Y %H:%M")
+    df_logOk["date_and_heure"] = df_logOk["etl_start_datetime"].dt.floor("h")
 
     df_grouped = df_logOk.groupby("date_and_heure").agg(
         nb_operations=("insert_mode", "count"),
