@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 6,
   "links": [],
   "panels": [
     {
@@ -108,7 +108,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        DATE_TRUNC('day', TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        AVG(processeur_1_raw) AS processeur_1,\n        AVG(processeur_2_raw) AS processeur_2,\n        AVG(processeur_3_raw) AS processeur_3,\n        AVG(processeur_4_raw) AS processeur_4,\n        AVG(processeur_5_raw) AS processeur_5,\n        AVG(processeur_6_raw) AS processeur_6,\n        AVG(processeur_7_raw) AS processeur_7,\n        AVG(processeur_8_raw) AS processeur_8\n    FROM myreport_cpu\n    GROUP BY 1\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        AVG(processeur_1_raw) AS processeur_1,\n        AVG(processeur_2_raw) AS processeur_2,\n        AVG(processeur_3_raw) AS processeur_3,\n        AVG(processeur_4_raw) AS processeur_4,\n        AVG(processeur_5_raw) AS processeur_5,\n        AVG(processeur_6_raw) AS processeur_6,\n        AVG(processeur_7_raw) AS processeur_7,\n        AVG(processeur_8_raw) AS processeur_8\n    FROM myreport_cpu\n    GROUP BY 1\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -223,7 +223,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 1' AS processeur, processeur_1_raw AS utilisation_cpu FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 2', processeur_2_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 3', processeur_3_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 4', processeur_4_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 5', processeur_5_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 6', processeur_6_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 7', processeur_7_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' - ', 1), 'DD/MM/YYYY HH24:MI:SS')) AS time,\n        'Processeur 8', processeur_8_raw FROM myreport_cpu\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        'Processeur 1' AS processeur, processeur_1_raw AS utilisation_cpu FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 2', processeur_2_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 3', processeur_3_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 4', processeur_4_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 5', processeur_5_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 6', processeur_6_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 7', processeur_7_raw FROM myreport_cpu\n    UNION ALL\n    SELECT \n        date_heure AS time,\n        'Processeur 8', processeur_8_raw FROM myreport_cpu\n)\nSELECT * FROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -335,7 +335,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(processeur_1_raw) AS cpu_core_1,\n    AVG(processeur_2_raw) AS cpu_core_2,\n    AVG(processeur_3_raw) AS cpu_core_3,\n    AVG(processeur_4_raw) AS cpu_core_4,\n    AVG(processeur_5_raw) AS cpu_core_5,\n    AVG(processeur_6_raw) AS cpu_core_6,\n    AVG(processeur_7_raw) AS cpu_core_7,\n    AVG(processeur_8_raw) AS cpu_core_8\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(processeur_1_raw) AS cpu_core_1,\n    AVG(processeur_2_raw) AS cpu_core_2,\n    AVG(processeur_3_raw) AS cpu_core_3,\n    AVG(processeur_4_raw) AS cpu_core_4,\n    AVG(processeur_5_raw) AS cpu_core_5,\n    AVG(processeur_6_raw) AS cpu_core_6,\n    AVG(processeur_7_raw) AS cpu_core_7,\n    AVG(processeur_8_raw) AS cpu_core_8\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -447,7 +447,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -539,7 +539,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(somme_raw) AS avg_cpu_usage\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -651,7 +651,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_mort_cpu_raw) AS cpu_dead_time_pct\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_cpu_raw) AS cpu_dead_time_pct\nFROM myreport_cpu\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -766,7 +766,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        couverture_cpu_raw/10000\n    FROM myreport_cpu\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        couverture_cpu_raw/10000\n    FROM myreport_cpu\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -807,6 +807,6 @@
   "timezone": "browser",
   "title": "myreport_cpu dashboard",
   "uid": "cedjdwmot48aoa",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }
