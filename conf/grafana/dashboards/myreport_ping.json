@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 8,
   "links": [],
   "panels": [
     {
@@ -111,7 +111,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    MAX(maximum_raw) AS max_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    MAX(maximum_raw) AS max_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -223,7 +223,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(perte_de_paquets_raw) AS packet_loss_rate\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(perte_de_paquets_raw) AS packet_loss_rate\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -338,7 +338,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    MIN(minimum_raw) AS min_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    MIN(minimum_raw) AS min_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -453,7 +453,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_mort_raw) AS avg_ping_dead_time_pct\nFROM myreport_ping\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_raw) AS avg_ping_dead_time_pct\nFROM myreport_ping\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -568,7 +568,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_du_ping_raw) AS avg_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_du_ping_raw) AS avg_ping_time_ms\nFROM myreport_ping\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -684,7 +684,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        couverture_raw/100 AS couverture_ping_pct\n    FROM myreport_ping\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        couverture_raw/100 AS couverture_ping_pct\n    FROM myreport_ping\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -725,6 +725,6 @@
   "timezone": "browser",
   "title": "myreport_ping dashboard",
   "uid": "fedscnhzpibk0f",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }
