@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -1184,7 +1184,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(protocoles_inconnus_entrants_volume_raw) AS unknown_incoming_protocols\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(protocoles_inconnus_entrants_volume_raw) AS unknown_incoming_protocols\nFROM myreport_reseau\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1299,7 +1299,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(paquets_volume_raw) AS total_packets\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(paquets_volume_raw) AS total_packets\nFROM myreport_reseau\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
