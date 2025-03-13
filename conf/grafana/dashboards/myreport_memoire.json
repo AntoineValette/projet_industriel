@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 10,
   "links": [],
   "panels": [
     {
@@ -108,7 +108,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memconnexion_raw) / POWER(1024, 3) AS connection_memory_gb  -- Convert KB to GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memconnexion_raw) / POWER(1024, 3) AS connection_memory_gb  -- Convert KB to GB\nFROM myreport_memoire\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -224,7 +224,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memserveurcible_raw) / POWER(1024, 2) AS used_memory_gb  -- Convert from KB to GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memserveurcible_raw) / POWER(1024, 2) AS used_memory_gb  -- Convert from KB to GB\nFROM myreport_memoire\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -340,7 +340,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memconnexion_raw) / POWER(1024,3) AS connection_memory_GB\nFROM myreport_memoire\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memconnexion_raw) / POWER(1024,3) AS connection_memory_GB\nFROM myreport_memoire\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -452,7 +452,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memoptimiseur_raw) / POWER(1024, 1) AS optimized_memory_gb  -- Convert KB to GB \nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memoptimiseur_raw) / POWER(1024, 1) AS optimized_memory_gb  -- Convert KB to GB \nFROM myreport_memoire\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -593,7 +593,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memserveurcible_raw) / POWER(1024, 2) AS avg_used_memory_GB  -- Convert KB to GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo() \nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memserveurcible_raw) / POWER(1024, 2) AS avg_used_memory_GB  -- Convert KB to GB\nFROM myreport_memoire\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo() \nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -708,7 +708,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(memtotaleserveur_raw) / POWER(1024, 2) AS total_memory_gb  -- Convert KB to GB\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(memtotaleserveur_raw) / POWER(1024, 2) AS total_memory_gb  -- Convert KB to GB\nFROM myreport_memoire\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -824,7 +824,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_mort_mem_raw) AS avg_mem_dead_time\nFROM myreport_memoire\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_mem_raw) AS avg_mem_dead_time\nFROM myreport_memoire\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -940,7 +940,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        couverture_mem_raw/100 AS couverture_mem_pct\n    FROM myreport_memoire\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        couverture_mem_raw/100 AS couverture_mem_pct\n    FROM myreport_memoire\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -981,6 +981,6 @@
   "timezone": "browser",
   "title": "myreport_memoire",
   "uid": "fedrwf7k3csu8f",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
