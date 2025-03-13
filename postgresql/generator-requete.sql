@@ -18,5 +18,5 @@ FROM logok ORDER BY RANDOM() LIMIT 200)
 UNION (SELECT server_version, client_version, model, type_log, insert_mode, rows_added, rows_updated, rows_deleted, rows_in_error, rows_in_warning, colonne, dt_log, start_time, end_time, duration, machine, session_log, project_name, product, resultat, now() - INTERVAL '1 HOUR', launcher_id, launcher_name, program_id, program_name, schedules_id, schedules_name, schedules_startdatetime
 FROM logok where 1=1 ORDER BY RANDOM() LIMIT 200); 
 
-select count(*) from logERR 
+select count(*) as "NbError" from logERR 
 where etl_start_datetime > NOW() - INTERVAL '1 HOUR'
