@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -111,7 +111,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(paquets_non_monodiffusion_entrants_volume_raw) AS non_monodiffusion_incoming_packets,\n    SUM(paquets_non_monodiffusion_sortants_volume_raw) AS non_monodiffusion_outgoing_packets\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(paquets_non_monodiffusion_entrants_volume_raw) AS non_monodiffusion_incoming_packets,\n    SUM(paquets_non_monodiffusion_sortants_volume_raw) AS non_monodiffusion_outgoing_packets\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -219,7 +219,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI')) AS time,\n    \n    AVG(trafic_entrant_debit_raw) / (1024*1024) AS \"Average Incoming Traffic Speed (Mbps)\",\n    AVG(trafic_sortant_debit_raw) / (1024*1024) AS \"Average Outgoing Traffic Speed (Mbps)\",\n    \n    AVG(AVG(trafic_entrant_debit_raw) / (1024*1024)) \n        OVER (PARTITION BY 1 ORDER BY DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI'))) \n        AS \"6-Day Moving Average of Incoming Speed (Mbps)\",\n    \n    AVG(AVG(trafic_sortant_debit_raw) / (1024*1024)) \n        OVER (PARTITION BY 1 ORDER BY DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI'))) \n        AS \"6-Day Moving Average of Outgoing Speed (Mbps)\"\n    \nFROM myreport_reseau\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    \n    AVG(trafic_entrant_debit_raw) / (1024*1024) AS \"Average Incoming Traffic Speed (Mbps)\",\n    AVG(trafic_sortant_debit_raw) / (1024*1024) AS \"Average Outgoing Traffic Speed (Mbps)\",\n    \n    AVG(AVG(trafic_entrant_debit_raw) / (1024*1024)) \n        OVER (PARTITION BY 1 ORDER BY date_heure) \n        AS \"6-Day Moving Average of Incoming Speed (Mbps)\",\n    \n    AVG(AVG(trafic_sortant_debit_raw) / (1024*1024)) \n        OVER (PARTITION BY 1 ORDER BY date_heure) \n        AS \"6-Day Moving Average of Outgoing Speed (Mbps)\"\n    \nFROM myreport_reseau\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -334,7 +334,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(monodiffusion_entrante_volume_raw) AS monodiffusion_incoming_mb,\n    SUM(monodiffusion_sortante_volume_raw) AS monodiffusion_outgoing_mb\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(monodiffusion_entrante_volume_raw) AS monodiffusion_incoming_mb,\n    SUM(monodiffusion_sortante_volume_raw) AS monodiffusion_outgoing_mb\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -445,7 +445,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI')) AS time,\n    MAX(trafic_entrant_volume_raw)/1048576 AS max_incoming_traffic_MB,\n    MAX(trafic_sortant_volume_raw)/1048576 AS max_outgoing_traffic_MB\nFROM myreport_reseau\nGROUP BY time\nORDER BY time;\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    MAX(trafic_entrant_volume_raw)/1048576 AS max_incoming_traffic_MB,\n    MAX(trafic_sortant_volume_raw)/1048576 AS max_outgoing_traffic_MB\nFROM myreport_reseau\nGROUP BY time\nORDER BY time;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -557,7 +557,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', \n        TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI')\n    ) AS time,\n    SUM(trafic_entrant_volume_raw)/1048576 AS incoming_traffic,\n    SUM(trafic_sortant_volume_raw)/1048576 AS outgoing_traffic\nFROM myreport_reseau\nWHERE \n    TO_TIMESTAMP(SPLIT_PART(date_heure, ' ', 1) || ' ' || SPLIT_PART(date_heure, ' ', 3), 'DD/MM/YYYY HH24:MI')\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(trafic_entrant_volume_raw)/1048576 AS incoming_traffic,\n    SUM(trafic_sortant_volume_raw)/1048576 AS outgoing_traffic\nFROM myreport_reseau\nWHERE \n    date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -697,7 +697,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(erreurs_entrantes_volume_raw) AS incoming_errors,\n    SUM(erreurs_sortantes_volume_raw) AS outgoing_errors\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(erreurs_entrantes_volume_raw) AS incoming_errors,\n    SUM(erreurs_sortantes_volume_raw) AS outgoing_errors\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -813,7 +813,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(trafic_entrant_debit_raw + trafic_sortant_debit_raw)/86400 AS total_bandwidth_usage\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(trafic_entrant_debit_raw + trafic_sortant_debit_raw)/86400 AS total_bandwidth_usage\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -928,7 +928,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(erreurs_entrantes_volume_raw + erreurs_sortantes_volume_raw) AS total_errors,\n    SUM(paquets_volume_raw) AS successful_packets\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(erreurs_entrantes_volume_raw + erreurs_sortantes_volume_raw) AS total_errors,\n    SUM(paquets_volume_raw) AS successful_packets\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1044,7 +1044,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(trafic_entrant_volume_raw + trafic_sortant_volume_raw)/1024/1024 AS total_network_trafic\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(trafic_entrant_volume_raw + trafic_sortant_volume_raw)/1024/1024 AS total_network_trafic\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1414,7 +1414,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(entrants_rejets_volume_raw) AS incoming_rejected_packets,\n    SUM(sortants_rejets_volume_raw) AS outgoing_rejected_packets\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) \n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    SUM(entrants_rejets_volume_raw) AS incoming_rejected_packets,\n    SUM(sortants_rejets_volume_raw) AS outgoing_rejected_packets\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1530,7 +1530,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(couverture_raw)/100 AS network_coverage_pct\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(couverture_raw)/100 AS network_coverage_pct\nFROM myreport_reseau\nWHERE date_heure\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1646,7 +1646,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temps_mort_raw) AS reseau_dead_time_pct\nFROM myreport_reseau\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temps_mort_raw) AS reseau_dead_time_pct\nFROM myreport_reseau\nWHERE date_heure\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1687,6 +1687,6 @@
   "timezone": "browser",
   "title": "myreport_reseau dashboard",
   "uid": "fedmb91o8wpa8e",
-  "version": 13,
+  "version": 1,
   "weekStart": ""
 }
