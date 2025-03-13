@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -111,7 +111,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(connexions_raw) AS connections\nFROM myreport_sql_general\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT\n    date_heure as time,\n    AVG(connexions_raw) AS connections\nFROM myreport_sql_general\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -219,7 +219,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    SUM(déconnexions_raw) AS total_disconnections\nFROM myreport_sql_general\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT\n    date_heure AS time,\n    SUM(déconnexions_raw) AS total_disconnections\nFROM myreport_sql_general\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -327,7 +327,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(connexions_user_raw) AS user_connections\nFROM myreport_sql_general\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT\n    date_heure AS time,\n    AVG(connexions_user_raw) AS user_connections\nFROM myreport_sql_general\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -442,7 +442,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(connexions_user_raw) AS avg_user_connections,\n    AVG(connexions_raw) AS avg_total_connections\nFROM myreport_sql_general\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n    BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
+          "rawSql": "SELECT\n    date_heure AS time,\n    AVG(connexions_user_raw) AS avg_user_connections,\n    AVG(connexions_raw) AS avg_total_connections\nFROM myreport_sql_general\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -558,7 +558,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \n    DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day')) AS time,\n    AVG(temp_mort_raw) AS sql_general_dead_time_pct\nFROM myreport_sql_general\nWHERE DATE_TRUNC('hour', TIMESTAMP '1900-01-01' + (date_heure_raw * INTERVAL '1 day'))\n      BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
+          "rawSql": "SELECT \n    date_heure AS time,\n    AVG(temp_mort_raw) AS sql_general_dead_time_pct\nFROM myreport_sql_general\nWHERE date_heure BETWEEN $__timeFrom() AND $__timeTo()\nGROUP BY time\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -674,7 +674,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "WITH formatted_data AS (\n    SELECT \n        TO_TIMESTAMP(SPLIT_PART(CAST(date_heure AS TEXT), ' - ', 1), 'DD/MM/YYYY HH24:MI:SS') AS time,\n        couverture_raw/100 AS couverture_sql_general_pct\n    FROM myreport_sql_general\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
+          "rawSql": "WITH formatted_data AS (\n    SELECT \n        date_heure AS time,\n        couverture_raw/100 AS couverture_sql_general_pct\n    FROM myreport_sql_general\n)\nSELECT * \nFROM formatted_data\nWHERE $__timeFilter(time)\nORDER BY time;",
           "refId": "A",
           "sql": {
             "columns": [
