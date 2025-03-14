@@ -4,11 +4,11 @@ import csv
 from core.classification_error import categorize_message
 from kafka import KafkaProducer
 from core.log import log_kfk
-
+from core.settings import settings
 
 # Configuration de KafkaProducer
 producer = KafkaProducer(
-    bootstrap_servers='kafka:9092',
+    bootstrap_servers=settings.KAFKA_URL,
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 

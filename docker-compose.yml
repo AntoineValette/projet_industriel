@@ -89,14 +89,8 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: my_kafka
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_MESSAGE_MAX_BYTES: 209715200
-      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200
-      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200
+    env_file:
+      - .env
     ports:
       - "9092:9092"
     depends_on:

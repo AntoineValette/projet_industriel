@@ -1,7 +1,7 @@
 import socket
 import time
 
-def wait_for_service(host="kafka", port=9092, timeout=60):
+def wait_for_service(host:str="kafka", port:int=9092, timeout:int=60):
     start_time = time.time()
     while time.time() - start_time < timeout:
         try:
