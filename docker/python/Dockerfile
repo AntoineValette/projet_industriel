@@ -22,3 +22,4 @@ WORKDIR /code
 
 # Copie le script Python
 COPY ../../python ./
+
