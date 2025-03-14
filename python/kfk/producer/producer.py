@@ -1,15 +1,9 @@
 import asyncio
 import json
 import csv
-import sys
-from datetime import datetime
 from core.classification_error import categorize_message
 from kafka import KafkaProducer
-import os
-
-def log(msg):
-    print(f"[{datetime.now()}] {msg}", flush=True)
-    sys.stdout.flush()
+from core.log import log_kfk
 
 
 # Configuration de KafkaProducer
@@ -28,7 +22,7 @@ async def stream_file(filepath, topic):
     reader = list(csv.DictReader(f, delimiter=';'))  # Lire tout le fichier dans une liste
     f.close()  # Fermer après lecture initiale
 
-    log(f"Lecture complète de {filepath} depuis le début...")
+    log_kfk(f"Lecture complète de {filepath} depuis le début...")
 
     # Envoyer toutes les lignes existantes au démarrage
     for i, row in enumerate(reader):
@@ -39,12 +33,12 @@ async def stream_file(filepath, topic):
             producer.send(topic, row)
         last_line_number = i + 1  # Mémoriser la dernière ligne lue
 
-    log(f"Fin de la lecture initiale de {filepath}. Passage en mode suivi (tail -f)...")
+    log_kfk(f"Fin de la lecture initiale de {filepath}. Passage en mode suivi (tail -f)...")
 
     # Envoi de l'information au consumer pour créer le fichier de signalisation
     producer.send(topic, "Fin de l'import historique")
 
-    log("Ligne signal envoyée")
+    log_kfk("Ligne signal envoyée")
 
     # Passer en mode suivi des nouvelles lignes
     while True:
@@ -64,7 +58,7 @@ async def stream_file(filepath, topic):
                     producer.send(topic, row)
                 else:
                     producer.send(topic, row)
-                log(f"[{filepath}] Nouvelle ligne envoyée : {row}")
+                log_kfk(f"[{filepath}] Nouvelle ligne envoyée : {row}")
 
             last_line_number = len(reader)  # Mettre à jour le dernier numéro de ligne
 
