@@ -64,43 +64,7 @@ FROM  myreport_cpu ORDER BY RANDOM() LIMIT 1
 ;
 
 
-do $$
-declare
-    start   timestamp:='2023-03-14 03:12:20';
-    stop    timestamp:=now();
-    step    interval :='40 minutes';
-    counter timestamp;
-begin
-    for counter in select generate_series(start,stop,step) loop
-        raise notice 'counter: %', counter;
-		
-		INSERT INTO myreport_cpu (
-            date_heure, date_heure_raw, somme, somme_raw, processeur_1, processeur_1_raw,
-            processeur_2, processeur_2_raw, processeur_3, processeur_3_raw, processeur_4,
-            processeur_4_raw, processeur_5, processeur_5_raw, processeur_6, processeur_6_raw,
-            processeur_7, processeur_7_raw, processeur_8, processeur_8_raw, temps_mort_cpu,
-            temps_mort_cpu_raw, couverture_cpu, couverture_cpu_raw
-        )
-        SELECT
-            current_time, date_heure_raw, somme, somme_raw, processeur_1,
-            processeur_1_raw, processeur_2, processeur_2_raw, processeur_3, processeur_3_raw,
-            processeur_4, processeur_4_raw, processeur_5, processeur_5_raw, processeur_6, processeur_6_raw,
-            processeur_7, processeur_7_raw, processeur_8, processeur_8_raw, temps_mort_cpu,
-            temps_mort_cpu_raw, couverture_cpu, couverture_cpu_raw
-        FROM
-            myreport_cpu
-        ORDER BY
-            RANDOM()
-        LIMIT 1;
-
-		
-    end loop;
-end $$;
         
-
-
-
-
 
 select count(*) as "NbError" from logERR 
 where etl_start_datetime > NOW() - INTERVAL '1 HOUR'
