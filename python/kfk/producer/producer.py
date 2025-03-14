@@ -1,7 +1,7 @@
 import asyncio
 import json
 import csv
-from core.classification_error import categorize_message
+from dags.classification_error import categorize_message
 from kafka import KafkaProducer
 from core.log import log_kfk
 from core.settings import settings
