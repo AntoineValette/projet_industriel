@@ -65,8 +65,7 @@ conda install sqlalchemy pandas psycopg2  fastparquet
 pip list --format=freeze > requirements.txt 
 ```
 ---
-## Arborescence
-# Arborescence du projet
+## 🌳 Arborescence du projet
 
 L'arborescence ci-dessous présente la structure complète du projet. Chaque section est commentée pour indiquer son rôle ou son contenu principal.
 ```
@@ -107,16 +106,18 @@ L'arborescence ci-dessous présente la structure complète du projet. Chaque sec
 ```
 
 ---
-## Notebooks
+## 📓 Notebooks
 Historiquement, on a commencé l'analyse des différents fichiers .csv de logs avec des notebooks jupyter. Ces notebooks sont plutôt bien commenté.
 Pour les curieux, le notebook ./notebook/fusion/fusion_log-logerreur.ipynb est très similaire à ./python/dags/fusion_dag.py. Le notebook est à l'origine de l'aggregation des sources pour créer la VO de dataset. NB : la table dataset finale dans Postgres est légèrement différente au finale. 
 
 ---
-## Tips & Tricks 
+## 💡 Tips & Tricks 
 
 ### Grafana 
 Pour éditer les dashboards, le plus simple est de le faire directement dans Grafana. En les enregistrant via l'interface de Grafana, les dashboards modifiés seront enregistrés dans un volume.
+
 ⚠️ ATTENTION : avec une suppression des volumes (docker compose down -v), les modifications de dashboards existants et la création de nouveaux dashboards seraient perdues. 
+
 ⚠️ Il est donc fortement, fortement conseillé d'enregister les dashboards ET de les ***exporter en JSON*** à nouveau dans ./conf/grafana/dahboards. 
 
 ### Airflow
