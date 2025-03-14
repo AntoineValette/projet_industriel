@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.9
 
 # Installer les dépendances système nécessaires pour psycopg2
 RUN apt update && apt install -y libpq-dev gcc

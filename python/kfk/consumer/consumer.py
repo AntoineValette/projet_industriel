@@ -1,15 +1,9 @@
 from kafka import KafkaConsumer
 import psycopg2
 import json
-from datetime import datetime
-import sys
 from core.settings import settings
 import os
-
-
-def log(msg):
-    print(f"[{datetime.now()}] {msg}", flush=True)
-    sys.stdout.flush()  # Force l'affichage immédiat
+from core.log import log_kfk
 
 def consummer():
     conn = psycopg2.connect(settings.POSTGRES_URL)
@@ -30,13 +24,13 @@ def consummer():
                 if not os.path.exists("/shared/historique_import_complete_LogETL.txt"):
                     with open("/shared/historique_import_complete_LogETL.txt", 'w') as f:
                         f.write("Historique importé avec succès.")
-                        log("Fin de l'importation historique, fichier signal logOK créé.")
+                        log_kfk("Fin de l'importation historique, fichier signal logOK créé.")
             elif message.topic == "logERR_topic":
-                log("etape 2")
+                log_kfk("etape 2")
                 if not os.path.exists("/shared/historique_import_complete_LogETLError.txt"):
                     with open("/shared/historique_import_complete_LogETLError.txt", 'w') as f:
                         f.write("Historique importé avec succès.")
-                        log("Fin de l'importation historique, fichier signal logERR créé.")
+                        log_kfk("Fin de l'importation historique, fichier signal logERR créé.")
         else:
             if message.topic == 'logOK_topic':
                 cur.execute("""
