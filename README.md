@@ -79,4 +79,6 @@ Fichier de configuration de Postgres.
 
 ---
 ## Notebook
-Historiquement, on a commencé l'analyse 
+Historiquement, on a commencé l'analyse des différents fichiers .csv de logs avec des notebooks jupyter. Ces notebooks sont plutôt bien commenté. 
+
+Pour les curieux, le notebook ./notebook/fusion/fusion_log-logerreur.ipynb est très similaire à ./python/dags/fusion_dag.py. Le notebook est à l'origine de l'aggregation des sources pour créer la VO de dataset. NB : la table dataset finale dans Postgres est légèrement différente au finale. 
