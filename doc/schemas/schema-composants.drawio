@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4" pages="7">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4" pages="6">
   <diagram name="Apache Kafka" id="2YBvvXClWsGukQMizWep">
     <mxGraphModel dx="976" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -438,8 +438,17 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="hJzF4Cvj-A_PKBKIgzOI-27" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="120" y="70" width="530" height="320" as="geometry" />
+        <mxCell id="incNxOHA0AhdMfu2wY_J-3" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="50" y="50" width="620" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="incNxOHA0AhdMfu2wY_J-1" value="" style="whiteSpace=wrap;html=1;shadow=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;textShadow=0;" vertex="1" parent="incNxOHA0AhdMfu2wY_J-3">
+          <mxGeometry width="620" height="370" as="geometry" />
+        </mxCell>
+        <mxCell id="incNxOHA0AhdMfu2wY_J-2" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Architecture fonctionnelle Python&lt;/h1&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;align=center;" vertex="1" parent="incNxOHA0AhdMfu2wY_J-3">
+          <mxGeometry x="40" y="370" width="540" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hJzF4Cvj-A_PKBKIgzOI-27" value="" style="group" vertex="1" connectable="0" parent="incNxOHA0AhdMfu2wY_J-3">
+          <mxGeometry x="70" y="20" width="530" height="320" as="geometry" />
         </mxCell>
         <mxCell id="hJzF4Cvj-A_PKBKIgzOI-23" value="" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;isLoopStandard=1;" vertex="1" parent="hJzF4Cvj-A_PKBKIgzOI-27">
           <mxGeometry x="330" y="211" width="170" height="99" as="geometry" />
@@ -554,14 +563,6 @@
             <mxPoint x="-10" y="-24" as="offset" />
           </mxGeometry>
         </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="3_KlkPeUmSUrCkB7UFqk" name="python-smartETL">
-    <mxGraphModel dx="976" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
       </root>
     </mxGraphModel>
   </diagram>
