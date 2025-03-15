@@ -134,7 +134,7 @@ def fusion_horaire(data_interval_start, data_interval_end):
 
     df_logs = df_errors.merge(df_logOk_grouped, on="date_and_heure", how="outer").fillna(0)
 
-    df_server_stats = reduce(lambda l, r: pd.merge(l, r, on="date_heure", how="outer"), df_dict.values())
+    df_server_stats = reduce(lambda lam, r: pd.merge(lam, r, on="date_heure", how="outer"), df_dict.values())
     df_server_stats = df_server_stats.rename(columns={'date_heure': 'date_and_heure'})
     df_server_stats['date_and_heure'] = pd.to_datetime(df_server_stats['date_and_heure'])
     print("✅ Fusion des logs serveurs terminée.")
