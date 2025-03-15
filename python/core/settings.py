@@ -1,6 +1,6 @@
 import os
 
-class Settings():
+class Settings:
     PROJECT_NAME = 'smartETL'
 
     # variable pour postgres

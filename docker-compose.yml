@@ -69,22 +69,6 @@ services:
         aliases:
           - dor_network
 
-  kafka-manager:
-    image: hlebalbau/kafka-manager:3.0.0.5
-    container_name: dor_kafka-manager
-    ports:
-      - "9000:9000"
-    environment:
-      ZK_HOSTS: "zookeeper:2181"
-      APPLICATION_SECRET: "randomsecret"
-    depends_on:
-      - zookeeper
-      - kafka
-    networks:
-      dor_network:
-        aliases:
-          - dor_network
-
   # Kafka Broker
   kafka:
     image: confluentinc/cp-kafka:7.9.0
@@ -110,7 +94,7 @@ services:
     build:
       dockerfile: docker/kafka/Dockerfile
       context: .
-    container_name: dor_python_producer
+    container_name: dor_kafka_producer
     depends_on:
       kafka:
         condition: service_healthy
@@ -132,15 +116,33 @@ services:
     build:
       dockerfile: docker/kafka/Dockerfile
       context: .
-    container_name: dor_python_consumer
+    container_name: dor_kafka_consumer
     depends_on:
-      - kafka
-      - postgres
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     entrypoint: ["python", "consumer.py"]
     env_file:
       - .env
     volumes:
       - shared-data:/shared
+    networks:
+      dor_network:
+        aliases:
+          - dor_network
+
+  kafka-manager:
+    image: hlebalbau/kafka-manager:3.0.0.5
+    container_name: dor_kafka_manager
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+      APPLICATION_SECRET: "randomsecret"
+    depends_on:
+      - zookeeper
+      - kafka
     networks:
       dor_network:
         aliases:
