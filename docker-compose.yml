@@ -137,9 +137,11 @@ services:
     container_name: dor_kafka_manager
     ports:
       - "9000:9000"
-    environment:
-      ZK_HOSTS: "zookeeper:2181"
-      APPLICATION_SECRET: "randomsecret"
+    env_file:
+      - .env
+    #environment:
+    #  ZK_HOSTS: "zookeeper:2181"
+    #  APPLICATION_SECRET: "randomsecret"
     depends_on:
       - zookeeper
       - kafka
