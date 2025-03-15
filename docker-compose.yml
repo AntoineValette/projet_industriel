@@ -60,8 +60,8 @@ services:
 
   # Kafka Zookeeper
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: my_zookeeper
+    image: confluentinc/cp-zookeeper:7.9.0
+    container_name: dor_zookeeper
     env_file:
       - .env
     networks:
@@ -71,7 +71,7 @@ services:
 
   kafka-manager:
     image: hlebalbau/kafka-manager:3.0.0.5
-    container_name: kafka-manager
+    container_name: dor_kafka-manager
     ports:
       - "9000:9000"
     environment:
@@ -87,8 +87,8 @@ services:
 
   # Kafka Broker
   kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: my_kafka
+    image: confluentinc/cp-kafka:7.9.0
+    container_name: dor_kafka
     env_file:
       - .env
     ports:
@@ -105,13 +105,12 @@ services:
       timeout: 5s
       retries: 5
 
-
   # Python Producer
   producer:
     build:
       dockerfile: docker/kafka/Dockerfile
       context: .
-    container_name: my_python_producer
+    container_name: dor_python_producer
     depends_on:
       kafka:
         condition: service_healthy
@@ -133,7 +132,7 @@ services:
     build:
       dockerfile: docker/kafka/Dockerfile
       context: .
-    container_name: my_python_consumer
+    container_name: dor_python_consumer
     depends_on:
       - kafka
       - postgres
