@@ -6,6 +6,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 .python_before_scripts:
   before_script:
+    - apt install -y libpq-dev gcc
     - pip install -r requirements.txt
     - pip install ruff pytest pytest-cov
 
