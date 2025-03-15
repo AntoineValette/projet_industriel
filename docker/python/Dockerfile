@@ -13,7 +13,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Installer les dépendances système nécessaires pour psycopg2
-# Installer les dépendances système nécessaires pour psycopg2
 RUN apt update && \
     apt upgrade -y && \
     apt install -y libpq-dev gcc && \
