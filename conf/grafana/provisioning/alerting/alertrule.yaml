@@ -26,7 +26,7 @@ groups:
                 FROM
                   logerr
                 WHERE
-                  etl_start_datetime BETWEEN $__timeFrom() AND $__timeTo()
+                  (etl_start_datetime AT TIME ZONE 'Europe/Paris') BETWEEN $__timeFrom() AND $__timeTo()
               refId: A
               sql:
                 columns:
