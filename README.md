@@ -1,6 +1,7 @@
 # Projet n°7 : smartETL "DOR"
 
 ## 💡 Description
+Projet industriel dans le cadre du MS SIO (promo 2025). Copie d'un repo scolaire. 
 
 ---
 
