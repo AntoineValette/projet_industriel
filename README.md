@@ -2,7 +2,8 @@
 
 ## 💡 Description
 
-- Projet industriel Smart ETL qui a pour objectif de valoriser les logs des ETLs pour l'équipe Data de Primever. 
+- Projet industriel Smart ETL qui a pour objectif de valoriser les logs des ETLs pour l'équipe Data de Primever.
+- Projet industriel dans le cadre du MS SIO (promo 2025). Copie d'un repo scolaire. 
 ---
 
 ## ⚠️ Pré-requis 
